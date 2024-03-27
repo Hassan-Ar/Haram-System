@@ -1,6 +1,5 @@
 Currency,AlphabeticCode
 Afghani,AFN
-Euro,EUR
 Lek,ALL
 Algerian Dinar,DZD
 US Dollar,USD
@@ -13,14 +12,12 @@ Argentine Peso,ARS
 Armenian Dram,AMD
 Aruban Florin,AWG
 Australian Dollar,AUD
-Euro,EUR
 Azerbaijan Manat,AZN
 Bahamian Dollar,BSD
 Bahraini Dinar,BHD
 Taka,BDT
 Barbados Dollar,BBD
 Belarusian Ruble,BYN
-Euro,EUR
 Belize Dollar,BZD
 CFA Franc BCEAO,XOF
 Bermudian Dollar,BMD
@@ -62,7 +59,6 @@ Kuna,HRK
 Cuban Peso,CUP
 Peso Convertible,CUC
 Netherlands Antillean Guilder,ANG
-Euro,EUR
 Czech Koruna,CZK
 Danish Krone,DKK
 Djibouti Franc,DJF
@@ -74,28 +70,19 @@ El Salvador Colon,SVC
 US Dollar,USD
 CFA Franc BEAC,XAF
 Nakfa,ERN
-Euro,EUR
 Lilangeni,SZL
 Ethiopian Birr,ETB
-Euro,EUR
 Falkland Islands Pound,FKP
 Danish Krone,DKK
 Fiji Dollar,FJD
-Euro,EUR
-Euro,EUR
-Euro,EUR
 CFP Franc,XPF
-Euro,EUR
 CFA Franc BEAC,XAF
 Dalasi,GMD
 Lari,GEL
-Euro,EUR
 Ghana Cedi,GHS
 Gibraltar Pound,GIP
-Euro,EUR
 Danish Krone,DKK
 East Caribbean Dollar,XCD
-Euro,EUR
 US Dollar,USD
 Quetzal,GTQ
 Pound Sterling,GBP
@@ -105,7 +92,6 @@ Guyana Dollar,GYD
 Gourde,HTG
 US Dollar,USD
 Australian Dollar,AUD
-Euro,EUR
 Lempira,HNL
 Hong Kong Dollar,HKD
 Forint,HUF
@@ -115,10 +101,8 @@ Rupiah,IDR
 SDR (Special Drawing Right),XDR
 Iranian Rial,IRR
 Iraqi Dinar,IQD
-Euro,EUR
 Pound Sterling,GBP
 New Israeli Sheqel,ILS
-Euro,EUR
 Jamaican Dollar,JMD
 Yen,JPY
 Pound Sterling,GBP
@@ -131,15 +115,12 @@ Won,KRW
 Kuwaiti Dinar,KWD
 Som,KGS
 Lao Kip,LAK
-Euro,EUR
 Lebanese Pound,LBP
 Loti,LSL
 Rand,ZAR
 Liberian Dollar,LRD
 Libyan Dinar,LYD
 Swiss Franc,CHF
-Euro,EUR
-Euro,EUR
 Pataca,MOP
 Denar,MKD
 Malagasy Ariary,MGA
@@ -147,20 +128,15 @@ Malawi Kwacha,MWK
 Malaysian Ringgit,MYR
 Rufiyaa,MVR
 CFA Franc BCEAO,XOF
-Euro,EUR
 US Dollar,USD
-Euro,EUR
 Ouguiya,MRU
 Mauritius Rupee,MUR
-Euro,EUR
 ADB Unit of Account,XUA
 Mexican Peso,MXN
 Mexican Unidad de Inversion (UDI),MXV
 US Dollar,USD
 Moldovan Leu,MDL
-Euro,EUR
 Tugrik,MNT
-Euro,EUR
 East Caribbean Dollar,XCD
 Moroccan Dirham,MAD
 Mozambique Metical,MZN
@@ -169,7 +145,6 @@ Namibia Dollar,NAD
 Rand,ZAR
 Australian Dollar,AUD
 Nepalese Rupee,NPR
-Euro,EUR
 CFP Franc,XPF
 New Zealand Dollar,NZD
 Cordoba Oro,NIO
@@ -191,22 +166,16 @@ Sol,PEN
 Philippine Peso,PHP
 New Zealand Dollar,NZD
 Zloty,PLN
-Euro,EUR
 US Dollar,USD
 Qatari Rial,QAR
-Euro,EUR
 Romanian Leu,RON
 Russian Ruble,RUB
 Rwanda Franc,RWF
-Euro,EUR
 Saint Helena Pound,SHP
 East Caribbean Dollar,XCD
 East Caribbean Dollar,XCD
-Euro,EUR
-Euro,EUR
 East Caribbean Dollar,XCD
 Tala,WST
-Euro,EUR
 Dobra,STN
 Saudi Riyal,SAR
 CFA Franc BCEAO,XOF
@@ -216,14 +185,11 @@ Leone,SLL
 Singapore Dollar,SGD
 Netherlands Antillean Guilder,ANG
 Sucre,XSU
-Euro,EUR
-Euro,EUR
 Solomon Islands Dollar,SBD
 Somali Shilling,SOS
 Rand,ZAR
 No universal currency,
 South Sudanese Pound,SSP
-Euro,EUR
 Sri Lanka Rupee,LKR
 Sudanese Pound,SDG
 Surinam Dollar,SRD
@@ -390,7 +356,6 @@ French Franc,FRF
 Italian Lira,ITL
 Dobra,STD
 Serbian Dinar,CSD
-Euro,EUR
 Slovak Koruna,SKK
 Tolar,SIT
 Financial Rand,ZAL
