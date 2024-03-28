@@ -2,6 +2,7 @@
 using Haram.RemittanceSystem.Customers;
 using Haram.RemittanceSystem.RemittanceTypes;
 using Haram.RemittanceSystem.Statuses;
+using Haram.RemittanceSystem.StatusTypes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,6 +21,7 @@ namespace Haram.RemittanceSystem.Remittances
         public double Amount { get; set; }
         public double TotalAmount { get; set; }
         public RemittanceType Type { get; set; }
+        public StatusType Status { get; set; }
 
 
         #region navigation
@@ -43,17 +45,33 @@ namespace Haram.RemittanceSystem.Remittances
         [ForeignKey(nameof(SenderId))]
         public virtual Customer Sender { get; set; }
 
-        public Guid ReceiverId { get; set; }
+        public Guid? ReceiverId { get; set; }
 
         [ForeignKey(nameof(ReceiverId))]
-        public virtual Customer Receiver { get; set; }
-        public virtual ICollection<Status>? Statuses { get; set; }
+        public virtual Customer? Receiver { get; set; }
+        public virtual ICollection<Status> Statuses { get; set; } = new List<Status>();
         public Guid CurrencyID { get; set; }
 
         [ForeignKey(nameof(CurrencyID))]
         public virtual Currency currency { get; set; }
 
         #endregion
+
+
+        public void SetAmmount(double ammount)
+        {
+            this.Amount = ammount;
+            TotalAmount = Amount + ((Amount * 5) / 100);
+        }
+
+        public void ChangeStatus(StatusType status)
+        {
+            this.Status = status;
+            this.Statuses.Add(new Status
+            {
+                Type = status
+            });
+        }
 
 
 

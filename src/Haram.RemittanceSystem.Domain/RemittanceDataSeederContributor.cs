@@ -33,7 +33,7 @@ namespace Haram.RemittanceSystem
             {
                 var file = _virtualFileProvider.GetFileInfo("codes-all-edited.csv");
                 var currencies = ReadFromCSVFile(file.CreateReadStream());
-                await _currencyrepository.InsertManyAsync(currencies, autoSave: true);
+                await _currencyrepository.InsertManyAsync(currencies.DistinctBy(x => x.AlphabeticCode), autoSave: true);
             }
         }
 

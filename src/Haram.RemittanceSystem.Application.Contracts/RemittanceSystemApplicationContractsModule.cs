@@ -18,12 +18,14 @@ namespace Haram.RemittanceSystem;
     typeof(AbpSettingManagementApplicationContractsModule),
     typeof(AbpTenantManagementApplicationContractsModule),
     typeof(AbpObjectExtendingModule),
-    typeof(AbpFluentValidationModule)
+    typeof(AbpFluentValidationModule),
+    typeof(AbpPermissionManagementDomainSharedModule)
 )]
 public class RemittanceSystemApplicationContractsModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         RemittanceSystemDtoExtensions.Configure();
+        
     }
 }

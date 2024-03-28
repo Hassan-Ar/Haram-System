@@ -9,7 +9,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace Haram.RemittanceSystem.Statuses
 {
-    internal class CreateUpdateStutusDto 
+    public class CreateUpdateStatusDto 
     {
         [Required]
         public Guid? Id { get; set; }

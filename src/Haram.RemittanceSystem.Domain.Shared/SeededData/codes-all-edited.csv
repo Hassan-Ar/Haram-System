@@ -19,7 +19,7 @@ Taka,BDT
 Barbados Dollar,BBD
 Belarusian Ruble,BYN
 Belize Dollar,BZD
-CFA Franc BCEAO,XOF
+
 Bermudian Dollar,BMD
 Indian Rupee,INR
 Ngultrum,BTN
@@ -28,12 +28,12 @@ Mvdol,BOV
 US Dollar,USD
 Convertible Mark,BAM
 Pula,BWP
-Norwegian Krone,NOK
+
 Brazilian Real,BRL
 US Dollar,USD
 Brunei Dollar,BND
 Bulgarian Lev,BGN
-CFA Franc BCEAO,XOF
+
 Burundi Franc,BIF
 Cabo Verde Escudo,CVE
 Riel,KHR
@@ -54,7 +54,7 @@ Congolese Franc,CDF
 CFA Franc BEAC,XAF
 New Zealand Dollar,NZD
 Costa Rican Colon,CRC
-CFA Franc BCEAO,XOF
+
 Kuna,HRK
 Cuban Peso,CUP
 Peso Convertible,CUC
@@ -87,7 +87,7 @@ US Dollar,USD
 Quetzal,GTQ
 Pound Sterling,GBP
 Guinean Franc,GNF
-CFA Franc BCEAO,XOF
+
 Guyana Dollar,GYD
 Gourde,HTG
 US Dollar,USD
@@ -127,7 +127,7 @@ Malagasy Ariary,MGA
 Malawi Kwacha,MWK
 Malaysian Ringgit,MYR
 Rufiyaa,MVR
-CFA Franc BCEAO,XOF
+
 US Dollar,USD
 Ouguiya,MRU
 Mauritius Rupee,MUR
@@ -148,12 +148,12 @@ Nepalese Rupee,NPR
 CFP Franc,XPF
 New Zealand Dollar,NZD
 Cordoba Oro,NIO
-CFA Franc BCEAO,XOF
+
 Naira,NGN
 New Zealand Dollar,NZD
 Australian Dollar,AUD
 US Dollar,USD
-Norwegian Krone,NOK
+
 Rial Omani,OMR
 Pakistan Rupee,PKR
 US Dollar,USD
@@ -178,7 +178,7 @@ East Caribbean Dollar,XCD
 Tala,WST
 Dobra,STN
 Saudi Riyal,SAR
-CFA Franc BCEAO,XOF
+
 Serbian Dinar,RSD
 Seychelles Rupee,SCR
 Leone,SLL
@@ -193,7 +193,7 @@ South Sudanese Pound,SSP
 Sri Lanka Rupee,LKR
 Sudanese Pound,SDG
 Surinam Dollar,SRD
-Norwegian Krone,NOK
+
 Swedish Krona,SEK
 Swiss Franc,CHF
 WIR Euro,CHE
@@ -204,7 +204,7 @@ Somoni,TJS
 Tanzanian Shilling,TZS
 Baht,THB
 US Dollar,USD
-CFA Franc BCEAO,XOF
+
 New Zealand Dollar,NZD
 Pa'anga,TOP
 Trinidad and Tobago Dollar,TTD
@@ -249,21 +249,21 @@ Markka,FIM
 Old Lek,ALK
 Andorran Peseta,ADP
 Spanish Peseta,ESP
-French Franc,FRF
+
 Kwanza,AOK
 New Kwanza,AON
 Kwanza Reajustado,AOR
 Austral,ARA
 Peso Argentino,ARP
 Peso,ARY
-Russian Ruble,RUR
+
 Schilling,ATS
 Azerbaijan Manat,AYM
 Azerbaijanian Manat,AZM
 Russian Ruble,RUR
 Belarusian Ruble,BYB
 Belarusian Ruble,BYR
-Russian Ruble,RUR
+
 Convertible Franc,BEC
 Belgian Franc,BEF
 Financial Franc,BEL
@@ -289,17 +289,17 @@ Ekwele,GQE
 Kroon,EEK
 European Currency Unit (E.C.U),XEU
 Markka,FIM
-French Franc,FRF
-French Franc,FRF
-French Franc,FRF
+
+
+
 Georgian Coupon,GEK
-Russian Ruble,RUR
+
 Mark der DDR,DDM
 Deutsche Mark,DEM
 Cedi,GHC
 Ghana Cedi,GHP
 Drachma,GRD
-French Franc,FRF
+
 Syli,GNE
 Syli,GNS
 Guinea Escudo,GWE
@@ -310,8 +310,8 @@ Irish Pound,IEP
 Pound,ILP
 Old Shekel,ILR
 Italian Lira,ITL
-Russian Ruble,RUR
-Russian Ruble,RUR
+
+
 Pathet Lao Kip,LAJ
 Latvian Lats,LVL
 Latvian Ruble,LVR
@@ -328,12 +328,12 @@ Maldive Rupee,MVQ
 Mali Franc,MLF
 Maltese Lira,MTL
 Maltese Pound,MTP
-French Franc,FRF
+
 Ouguiya,MRO
-French Franc,FRF
+
 Mexican Peso,MXP
-Russian Ruble,RUR
-French Franc,FRF
+
+
 Mozambique Escudo,MZE
 Mozambique Metical,MZM
 Netherlands Guilder,NLG
@@ -345,14 +345,14 @@ Nuevo Sol ,PEN
 Sol,PES
 Zloty,PLZ
 Portuguese Escudo,PTE
-French Franc,FRF
+
 Leu A/52,ROK
 Old Leu,ROL
 New Romanian Leu ,RON
-Russian Ruble,RUR
-French Franc,FRF
-French Franc,FRF
-French Franc,FRF
+
+
+
+
 Italian Lira,ITL
 Dobra,STD
 Serbian Dinar,CSD
@@ -369,13 +369,13 @@ Sudanese Pound,SDP
 Surinam Guilder,SRG
 Lilangeni,SZL
 WIR Franc (for electronic),CHC
-Russian Ruble,RUR
+
 Tajik Ruble,TJR
 Rupiah,IDR
 Timor Escudo,TPE
 Old Turkish Lira,TRL
 New Turkish Lira,TRY
-Russian Ruble,RUR
+
 Turkmenistan Manat,TMM
 Uganda Shilling,UGS
 Old Shilling,UGW
@@ -384,7 +384,7 @@ Rouble,SUR
 US Dollar (Same day),USS
 Old Uruguay Peso,UYN
 Uruguayan Peso,UYP
-Russian Ruble,RUR
+
 Bolivar,VEB
 Bolivar Fuerte,VEF
 Bolivar,VEF

@@ -12,8 +12,7 @@ namespace Haram.RemittanceSystem.Statuses
 {
     public class Status : AuditedEntity<Guid>
     {
-        public DateTime StatusDate { get; set; }
-        public StatusType statusType { get; set; }
+        public StatusType Type { get; set; }
 
         [ForeignKey(nameof(Remittance))]
         public Guid RemittanceId { get; set; }

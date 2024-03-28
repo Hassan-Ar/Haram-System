@@ -1,4 +1,5 @@
-﻿using Haram.RemittanceSystem.Remittances;
+﻿using Haram.RemittanceSystem.Genders;
+using Haram.RemittanceSystem.Remittances;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace Haram.RemittanceSystem.Customers
         public DateTime BirthDate { get; set; }
         public string? Address { get; set; }
         public string Phone { get; set; }
+        public Gender CustGender { get; set; }
 
         #region navigitionProperties
         public virtual ICollection<Remittance>? SendedRemittances { get; set; }

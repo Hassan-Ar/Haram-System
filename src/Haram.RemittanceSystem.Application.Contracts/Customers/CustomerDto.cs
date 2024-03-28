@@ -15,8 +15,6 @@ namespace Haram.RemittanceSystem.Customers
         public DateTime BirthDate { get; set; }
         public string? Address { get; set; }
         public string Phone { get; set; }
-        public virtual ICollection<RemittanceDto>? SendedRemittances { get; set; }
-        public virtual ICollection<RemittanceDto>? ReceivedRemittances { get; set; }
 
     }
 }

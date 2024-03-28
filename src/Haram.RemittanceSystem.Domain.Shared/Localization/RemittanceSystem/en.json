@@ -4,6 +4,8 @@
     "Menu:Home": "Home",
     "Welcome": "Welcome",
     "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io.",
-    "RemittanceSystem:00001": "There is already an author with the same name: {name}"
+    "RemittanceSystem:00001": "There is already an Customer with the same name: {name}",
+    "RemittanceSystem:00002": "Customer Age must be over 18 "
+
   }
 }

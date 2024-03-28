@@ -3,15 +3,14 @@ using Haram.RemittanceSystem.StatusTypes;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Volo.Abp.Application.Dtos;
 
 namespace Haram.RemittanceSystem.Statuses
 {
-    public class StatusDto
+    public class StatusDto : AuditedEntityDto<Guid>
     {
-        public DateTime StatusDate { get; set; }
         public StatusType statusType { get; set; }
 
         public Guid remittanceId { get; set; }
-        public virtual RemittanceDto remittance { get; set; }
     }
 }

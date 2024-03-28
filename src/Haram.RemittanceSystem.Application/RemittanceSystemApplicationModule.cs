@@ -27,5 +27,10 @@ public class RemittanceSystemApplicationModule : AbpModule
         {
             options.AddMaps<RemittanceSystemApplicationModule>();
         });
+
+        //Configure<PermissionManagementOptions>(options =>
+        //{
+        //    options.ManagementProviders.Add<CustomPermissionManagementProvider>();
+        //});
     }
 }

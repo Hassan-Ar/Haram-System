@@ -10,7 +10,7 @@ public class RemittanceSystemPermissionDefinitionProvider : PermissionDefinition
     {
         var myGroup = context.AddGroup(RemittanceSystemPermissions.GroupName);
         //Define your own permissions here. Example:
-        //myGroup.AddPermission(RemittanceSystemPermissions.MyPermission1, L("Permission:MyPermission1"));
+        myGroup.AddPermission(RemittanceSystemPermissions.Remittances.Default, L("Permission:Remittances")).AddChild(RemittanceSystemPermissions.Remittances.Create);
     }
 
     private static LocalizableString L(string name)

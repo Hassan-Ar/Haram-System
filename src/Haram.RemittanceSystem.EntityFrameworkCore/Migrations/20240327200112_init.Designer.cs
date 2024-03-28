@@ -13,8 +13,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Haram.RemittanceSystem.Migrations
 {
     [DbContext(typeof(RemittanceSystemDbContext))]
-    [Migration("20240323141256_Initial")]
-    partial class Initial
+    [Migration("20240327200112_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,7 +34,7 @@ namespace Haram.RemittanceSystem.Migrations
 
                     b.Property<string>("AlphabeticCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2")
@@ -57,6 +57,9 @@ namespace Haram.RemittanceSystem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AlphabeticCode")
+                        .IsUnique();
 
                     b.ToTable("RemittanceSystemCurrencies", (string)null);
                 });
@@ -86,6 +89,9 @@ namespace Haram.RemittanceSystem.Migrations
                     b.Property<Guid?>("CreatorId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("CreatorId");
+
+                    b.Property<int>("CustGender")
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("DeleterId")
                         .HasColumnType("uniqueidentifier")
@@ -198,7 +204,7 @@ namespace Haram.RemittanceSystem.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
-                    b.Property<Guid>("ReceiverId")
+                    b.Property<Guid?>("ReceiverId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ReleasedById")
@@ -210,6 +216,9 @@ namespace Haram.RemittanceSystem.Migrations
                     b.Property<string>("SerialNo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<double>("TotalAmount")
                         .HasColumnType("float");
@@ -258,10 +267,7 @@ namespace Haram.RemittanceSystem.Migrations
                     b.Property<Guid>("RemittanceId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("StatusDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("statusType")
+                    b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -2028,7 +2034,6 @@ namespace Haram.RemittanceSystem.Migrations
                     b.HasOne("Haram.RemittanceSystem.Customers.Customer", "Receiver")
                         .WithMany("ReceivedRemittances")
                         .HasForeignKey("ReceiverId")
-                        .IsRequired()
                         .HasConstraintName("FK_remittances_customers_ReceiverId");
 
                     b.HasOne("Volo.Abp.Identity.IdentityUser", "ReleasedBy")
