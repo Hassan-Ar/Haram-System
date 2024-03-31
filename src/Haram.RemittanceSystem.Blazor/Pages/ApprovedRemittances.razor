@@ -1,0 +1,140 @@
+﻿@page "/approvedremittances"
+@using Haram.RemittanceSystem.Currencies
+@using Haram.RemittanceSystem.Customers
+@using Haram.RemittanceSystem.Localization
+@using Haram.RemittanceSystem.StatusTypes
+@using Volo.Abp.Application.Dtos
+@using Haram.RemittanceSystem.Remittances
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Components.Web
+@using Haram.RemittanceSystem.RemittanceTypes
+@inject ICurrencyAppService currencyappservice
+@inject ICustomerAppService customerappservice
+@inject IRemittanceAppServices remittanceappservice
+@inject IStringLocalizer<RemittanceSystemResource> L
+@inject AbpBlazorMessageLocalizerHelper<RemittanceSystemResource> LH
+@inherits AbpCrudPageBase<IRemittanceAppServices, RemittanceDto, Guid, GetListRemittancesInputDto, CreateUpdateRemittanceDto>
+
+<Card>
+    -        <CardHeader>
+        <Row Class="justify-content-between">
+            <Column ColumnSize="ColumnSize.IsAuto">
+                <h2> Approved Remittances</h2>
+            </Column>
+        </Row>
+    </CardHeader>
+    <CardBody>
+        <DataGrid TItem="RemittanceDto"
+                  Data="Entities"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize">
+
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="RemittanceDto" @ref="@EntityActionsColumn">
+                    <DisplayTemplate>
+                        <Blazorise.Button Clicked="()=>SetAsReleased(context)" Color="Blazorise.Color.Secondary">Release</Blazorise.Button>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+
+
+                <DataGridColumn TItem="RemittanceDto"
+                                Field="@nameof(RemittanceDto.Type)"
+                                Caption=@L["Type"]>
+                    <DisplayTemplate>
+                        @context.Type
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="RemittanceDto"
+                                Field="@nameof(RemittanceDto.Status)"
+                                Caption=@L["Status"]>
+                    <DisplayTemplate>
+                        @context.Status
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="RemittanceDto"
+                                Field="@nameof(RemittanceDto.Amount)"
+                                Caption=@L["Ammount"]>
+                    <DisplayTemplate>
+                        @context.Amount
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="RemittanceDto"
+                                Field="@nameof(RemittanceDto.TotalAmount)"
+                                Caption=@L["Total Ammount"]>
+                    <DisplayTemplate>
+                        @context.TotalAmount
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="RemittanceDto"
+                                Field="@nameof(RemittanceDto.Status)"
+                                Caption=@L["Status"]>
+                    <DisplayTemplate>
+                        @context.Status
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="RemittanceDto"
+                                Caption="Sender Name">
+                    <DisplayTemplate>
+                        @context.Sender.FirstName.ToString()-@context.Sender.LastName.ToString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="RemittanceDto"
+                                Field="@nameof(RemittanceDto.CreationTime)"
+                                Caption="CreationTime">
+                    <DisplayTemplate>
+                        @context.CreationTime.ToShortDateString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="RemittanceDto"
+                                Field="@nameof(RemittanceDto.LastModificationTime)"
+                                Caption="Seted ready Date">
+                    <DisplayTemplate>
+                        @context.LastModificationTime
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="RemittanceDto"
+                                Field="@nameof(RemittanceDto.Amount)"
+                                Caption="Amount">
+                </DataGridColumn>
+
+
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+@code {
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+    private async Task GetRemittencAsync()
+    {
+        GetListInput.Status = StatusType.Approved;
+        var result = await AppService.GetListAsync(
+            GetListInput
+            );
+        Entities = result.Items;
+        TotalCount = (int)result.TotalCount;
+    }
+    protected override async Task OnDataGridReadAsync(DataGridReadDataEventArgs<RemittanceDto> e)
+    {
+        //_logger.LogInformation("On Data Grid executed");
+        await GetRemittencAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+    private async Task SetAsReleased(RemittanceDto remittanceDto)
+    {
+        NavigationManager.NavigateTo("readyremittances");
+
+        await AppService.ChangeStatus(remittanceDto.Id, Guid.Empty);
+        await GetRemittencAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+
+}
+
+

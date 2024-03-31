@@ -28,7 +28,6 @@ namespace Haram.RemittanceSystem
 
         public async Task SeedAsync(DataSeedContext context)
         {
-
             if (!await _currencyrepository.AnyAsync())
             {
                 var file = _virtualFileProvider.GetFileInfo("codes-all-edited.csv");
@@ -57,6 +56,6 @@ namespace Haram.RemittanceSystem
             }
             return list;
         }
-    }
+    } 
 }
 

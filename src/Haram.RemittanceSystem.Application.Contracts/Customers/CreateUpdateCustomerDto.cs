@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Haram.RemittanceSystem.Genders;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -30,6 +31,9 @@ namespace Haram.RemittanceSystem.Customers
         [Required]
         [MaxLength(100)]
         public string Phone { get; set; }
+        [Required]
+        public Gender CustGender { get; set; }
+
 
     }
 }

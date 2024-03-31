@@ -8,12 +8,11 @@ namespace Haram.RemittanceSystem.Currencies
 {
     public class CreateUpdateCurrencyDto 
     {
-        public Guid? Id { get; set; }
         [Required]
         [MaxLength(100)]
         public string Name { get; set; }
         [Required]
         [MaxLength(100)]
-        public string SympolPngPath { get; set; }
+        public string AlphabeticCode { get; set; }
     }
 }

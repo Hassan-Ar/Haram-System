@@ -1,4 +1,5 @@
-﻿using Haram.RemittanceSystem.Remittances;
+﻿using Haram.RemittanceSystem.Genders;
+using Haram.RemittanceSystem.Remittances;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +9,7 @@ namespace Haram.RemittanceSystem.Customers
 {
     public class CustomerDto : AuditedEntityDto<Guid> 
     {
+        
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string FatherName { get; set; }
@@ -15,6 +17,8 @@ namespace Haram.RemittanceSystem.Customers
         public DateTime BirthDate { get; set; }
         public string? Address { get; set; }
         public string Phone { get; set; }
+        public Gender CustGender { get; set; }
+
 
     }
 }

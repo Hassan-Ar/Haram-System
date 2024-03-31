@@ -8,6 +8,6 @@ namespace Haram.RemittanceSystem.Currencies
     public class CurrencyDto : AuditedEntityDto<Guid>
     {
         public string Name { get; set; }
-        public string SympolPngPath { get; set; }
+        public string AlphabeticCode { get; set; }
     }
 }

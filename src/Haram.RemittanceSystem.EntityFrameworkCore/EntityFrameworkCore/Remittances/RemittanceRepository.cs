@@ -1,4 +1,5 @@
 ﻿using Haram.RemittanceSystem.Remittances;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,16 @@ namespace Haram.RemittanceSystem.EntityFrameworkCore.Remittances
         {
 
         }
+        public async  Task<IQueryable<Remittance>> GetRemittancesWithData()
+        {
+            return  DbContext.Remittances.Include(x => x.Sender)
+                .Include(x => x.Receiver)
+                .Include(x => x.IssuedBy)
+                .Include(x => x.ApprovedBy)
+                .Include(x => x.ReleasedBy)
+                ;
+        }
+
+
     }
 }

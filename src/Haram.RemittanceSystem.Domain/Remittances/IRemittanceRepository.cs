@@ -10,5 +10,7 @@ namespace Haram.RemittanceSystem.Remittances
     public interface IRemittanceRepository : IRepository<Remittance,Guid>
     {
 
+        public Task<IQueryable<Remittance>> GetRemittancesWithData();
+
     }
 }

@@ -48,7 +48,59 @@ public class RemittanceSystemMenuContributor : IMenuContributor
                 icon: "fas fa-home"
             )
         );
-     
+                      context.Menu.AddItem(
+                  new ApplicationMenuItem(
+                      "Remittances",
+                      l["Remittances"],
+                      icon: "fa fa-book"
+                  ).AddItem(
+                      new ApplicationMenuItem(
+                          "Remittances.Remittances",
+                          l["Remittances List"],
+                          url: "/remittances"
+                      )
+                  )
+                  .AddItem(
+                      new ApplicationMenuItem(
+                          "Remittances.ReadyRemittances",
+                          l["Ready Remittances"],
+                          url: "/readyremittances"
+                      )
+                  )
+                   .AddItem(
+                      new ApplicationMenuItem(
+                          "Remittances.ApprovedRemittances",
+                          l["Approved Remittances"],
+                          url: "/approvedremittances"
+                      )
+                  )
+              );
+
+        context.Menu.AddItem(
+                 new ApplicationMenuItem(
+                     "Customers",
+                     l["Customers"],
+                     icon: "fa fa-book"
+                 ).AddItem(
+                     new ApplicationMenuItem(
+                         "Customers.Customers",
+                         l["Customers List"],
+                         url: "/customers"
+                     )
+                 )
+              );
+                      //currencies
+     context.Menu.AddItem(
+              new ApplicationMenuItem(
+              "Currencies",
+              l["Currencies"],
+              icon: "fa fa-book"
+              ).AddItem(
+              new ApplicationMenuItem(
+                 "Currencies.currencies",
+                 l["currencies List"],
+     url: "/currencies")));
+
         var administration = context.Menu.GetAdministration();
 
         if (MultiTenancyConsts.IsEnabled)
@@ -79,6 +131,10 @@ public class RemittanceSystemMenuContributor : IMenuContributor
             icon: "fa fa-cog",
             order: 1000,
             null).RequireAuthenticated());
+
+
+
+
 
         return Task.CompletedTask;
     }

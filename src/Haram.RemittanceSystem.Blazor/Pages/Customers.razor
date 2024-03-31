@@ -1,0 +1,326 @@
+﻿@page "/customers"
+@using Haram.RemittanceSystem.Currencies
+@using Haram.RemittanceSystem.Customers
+@using Haram.RemittanceSystem.Localization
+@using Volo.Abp.Application.Dtos
+@using Haram.RemittanceSystem.Remittances
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Components.Web
+@using Haram.RemittanceSystem.RemittanceTypes
+@using Haram.RemittanceSystem.Genders
+
+
+@inject ICurrencyAppService currencyappservice
+@inject IStringLocalizer<RemittanceSystemResource> L
+@inject AbpBlazorMessageLocalizerHelper<RemittanceSystemResource> LH
+@inherits AbpCrudPageBase<ICustomerAppService, CustomerDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateCustomerDto>
+
+<Card>
+-        <CardHeader>
+            <Row Class="justify-content-between">
+                <Column ColumnSize="ColumnSize.IsAuto">
+                    <h2>Customers</h2>
+                </Column>
+                <Column ColumnSize="ColumnSize.IsAuto">
+                    <Button Color="Color.Primary"
+                            Clicked="OpenCreateModalAsync">
+                        New Customer
+                    </Button>
+                </Column>
+            </Row>
+        </CardHeader>
+    <CardBody>
+        <DataGrid TItem="CustomerDto"
+                  Data="Entities"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize">
+
+            <DataGridColumns>
+
+                <DataGridEntityActionsColumn TItem="CustomerDto" @ref="@EntityActionsColumn">
+                    <DisplayTemplate>
+                        <EntityActions TItem="CustomerDto" EntityActionsColumn="@EntityActionsColumn">
+                            <EntityAction TItem="CustomerDto"
+                                          Text="Edite"
+                                          Clicked="() => OpenEditModalAsync(context)" />
+                            <EntityAction TItem="CustomerDto"
+                                          Text="Delete]"
+                                          Clicked="() => DeleteEntityAsync(context)"
+                                          ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)" />
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+                <DataGridColumn TItem="CustomerDto"
+                                Field="@nameof(CustomerDto.FirstName)"
+                                Caption="First Name">
+                    <DisplayTemplate>
+                        @context.FirstName
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="CustomerDto"
+                                Field="@nameof(CustomerDto.LastName)"
+                                Caption="Last Name">
+                    <DisplayTemplate>
+                        @context.LastName
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="CustomerDto"
+                                Field="@nameof(CustomerDto.FatherName)"
+                                Caption="Father Name">
+                    <DisplayTemplate>
+                        @context.FatherName
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+
+                <DataGridColumn TItem="CustomerDto"
+                                Field="@nameof(CustomerDto.Phone)"
+                                Caption="Phone">
+                    <DisplayTemplate>
+                        @context.Phone
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="CustomerDto"
+                                Field="@nameof(CustomerDto.Address)"
+                                Caption="Address">
+                    <DisplayTemplate>
+                        @context.Address
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="CustomerDto"
+                                Field="@nameof(CustomerDto.BirthDate)"
+                                Caption="BirthDate">
+                    <DisplayTemplate>
+                        @context.BirthDate.ToShortDateString();
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="CustomerDto"
+                                Field="@nameof(CustomerDto.CreationTime)"
+                                Caption="Regsterd in">
+                    <DisplayTemplate>
+                        @context.CreationTime.ToShortDateString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+
+<Modal @ref="@CreateModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@L["New Customer"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateModalAsync"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                                <FieldLabel>First Name</FieldLabel>
+                            <TextEdit @bind-Text="@NewEntity.FirstName">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>Last Name</FieldLabel>
+                                <TextEdit @bind-Text="@NewEntity.LastName">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>Father Name</FieldLabel>
+                                <TextEdit @bind-Text="@NewEntity.FatherName">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>Mother Name</FieldLabel>
+                                <TextEdit @bind-Text="@NewEntity.MotherName">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+
+                    <Field>
+                       <FieldLabel>@L["Gender"]</FieldLabel>
+                       <Select TValue="Gender" @bind-SelectedValue="@NewEntity.CustGender">
+                           @foreach (int gender in Enum.GetValues(typeof(Gender)))
+                       {
+                           <SelectItem TValue="Gender" Value="@((Gender) gender)">
+                               @gender
+                           </SelectItem>
+                       }
+                        </Select>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["BirthDate"]</FieldLabel>
+                            <DateEdit TValue="DateTime" @bind-Date="@NewEntity.BirthDate" />
+                        </Field>
+
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>Address</FieldLabel>
+                                <TextEdit @bind-Text="@NewEntity.Address">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>Phone</FieldLabel>
+                                <TextEdit @bind-Text="@NewEntity.Phone">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="CreateEntityAsync">@L["Save"]</Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="@EditModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@EditingEntity.FirstName-@EditingEntity.LastName</ModalTitle>
+                <CloseButton Clicked="CloseEditModalAsync"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@EditValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                                <FieldLabel>First Name</FieldLabel>
+                            <TextEdit @bind-Text="@NewEntity.FirstName">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>Last Name</FieldLabel>
+                                <TextEdit @bind-Text="@NewEntity.LastName">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>Father Name</FieldLabel>
+                                <TextEdit @bind-Text="@NewEntity.FatherName">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>Mother Name</FieldLabel>
+                                <TextEdit @bind-Text="@NewEntity.MotherName">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+
+                         <Field>
+                            <FieldLabel>@L["Gender"]</FieldLabel>
+                            <Select TValue="Gender" @bind-SelectedValue="@NewEntity.CustGender">
+                                @foreach (int gender in Enum.GetValues(typeof(Gender)))
+                            {
+                                <SelectItem TValue="Gender" Value="@((Gender) gender)">
+                                    @gender
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["BirthDate"]</FieldLabel>
+                            <DateEdit TValue="DateTime" @bind-Date="@NewEntity.BirthDate" />
+                        </Field>
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>Address</FieldLabel>
+                                <TextEdit @bind-Text="@NewEntity.Address">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>Phone</FieldLabel>
+                                <TextEdit @bind-Text="@NewEntity.Phone">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="UpdateEntityAsync">@L["Save"]</Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+

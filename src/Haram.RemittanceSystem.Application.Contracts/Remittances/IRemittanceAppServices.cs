@@ -9,6 +9,7 @@ namespace Haram.RemittanceSystem.Remittances
 {
     public interface IRemittanceAppServices : ICrudAppService<RemittanceDto,Guid, GetListRemittancesInputDto, CreateUpdateRemittanceDto>
     {
+        public  Task<RemittanceDto> ChangeStatus(Guid id, Guid? receiverId = null);
         //public Task<List<RemittanceDto>> GetAllRemittances(PagedAndSortedResultRequestDto input);
         //public Task<List<RemittanceDto>> GetAllDraftRemittances(PagedAndSortedResultRequestDto input);
         //public Task<List<RemittanceDto>> GetAllReadyRemittances(PagedAndSortedResultRequestDto input);
