@@ -29,12 +29,13 @@
                   ReadData="OnDataGridReadAsync"
                   TotalItems="TotalCount"
                   ShowPager="true"
-                  PageSize="PageSize">
+                  PageSize="PageSize"
+                  Filterable=true>
 
             <DataGridColumns>
                 <DataGridEntityActionsColumn TItem="RemittanceDto" @ref="@EntityActionsColumn">
                     <DisplayTemplate>
-                        <Blazorise.Button Clicked="()=>SetAsReleased(context)" Color="Blazorise.Color.Secondary">Release</Blazorise.Button>
+                        <Blazorise.Button Clicked="()=> OpenEditModalAsync(context)" Color="Blazorise.Color.Secondary">Release</Blazorise.Button>
                     </DisplayTemplate>
                 </DataGridEntityActionsColumn>
 
@@ -108,9 +109,76 @@
     </CardBody>
 </Card>
 
-@code {
+<Modal @ref="@EditModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@EditingEntity.SerialNo</ModalTitle>
+                <CloseButton Clicked="CloseEditModalAsync"/>
+            </ModalHeader>
+            <ModalBody>
+                    <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
+                        <Field >
+                            <FieldLabel>@L["Type"]</FieldLabel>
+                            <TextEdit Text="@EditingEntity.Type.ToString()" Disabled />
+                    </Field>
+
+                    <Field>
+                        <FieldLabel>@L["Currency"]</FieldLabel>
+                            <TextEdit Text="@EditingEntity.CurrencyID.ToString()" Disabled />
+                    </Field>
+
+                    <Field>
+                        <FieldLabel>@L["Sender"]</FieldLabel>
+                    </Field>
+
+                    <Field>
+                        <FieldLabel>@L["Amount"]</FieldLabel>
+                            <NumericEdit TValue="double" @bind-Value="NewEntity.Amount" />
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["Reciver"]</FieldLabel>
+                            <Select TValue="Guid?" @bind-SelectedValue="@EditingEntity.ReciverId">
+                                @foreach (var c in Customers)
+                            {
+                                <SelectItem TValue="Guid" Value="@((Guid) c.Id)">
+                                    @L[$"{@c.FirstName} {@c.LastName}"]
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Field>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="SetAsReleased">
+                    @L["Save"]
+                </Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+    @code {
+    public Modal? AprrovedModal { get; set; }
     [Inject]
     public NavigationManager NavigationManager { get; set; }
+    public ICollection<CurrencyDto> Currencies { get; set; }
+
+    public ICollection<CustomerDto> Customers { get; set; }
+    protected Modal? ApprovedRemittanceModal;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Currencies = (await currencyappservice.GetListAsync(new PagedAndSortedResultRequestDto())).Items.ToList();
+        Customers = (await customerappservice.GetListAsync(new PagedAndSortedResultRequestDto())).Items.ToList();
+
+    }
     private async Task GetRemittencAsync()
     {
         GetListInput.Status = StatusType.Approved;
@@ -126,14 +194,16 @@
         await GetRemittencAsync();
         await InvokeAsync(StateHasChanged);
     }
-    private async Task SetAsReleased(RemittanceDto remittanceDto)
+    // private async Task SetAsReleased(Guid reciverId,Guid remittanceId)
+    private async Task SetAsReleased()
     {
         NavigationManager.NavigateTo("readyremittances");
 
-        await AppService.ChangeStatus(remittanceDto.Id, Guid.Empty);
+        await AppService.ChangeStatus(EditingEntity.Id.Value, EditingEntity.ReciverId);
         await GetRemittencAsync();
         await InvokeAsync(StateHasChanged);
     }
+
 
 }
 

@@ -28,12 +28,12 @@ namespace Haram.RemittanceSystem.Remittances
         public Guid? ApprovedByID { get; set; }
 
         [ForeignKey(nameof(ApprovedByID))]
-        public  virtual IdentityUser? ApprovedBy { get; set; }
+        public virtual IdentityUser? ApprovedBy { get; set; }
 
         public Guid? ReleasedById { get; set; }
 
         [ForeignKey(nameof(ReleasedById))]
-        public virtual  IdentityUser? ReleasedBy { get; set; }
+        public virtual IdentityUser? ReleasedBy { get; set; }
 
         public Guid? IssuedById { get; set; }
 
@@ -64,13 +64,33 @@ namespace Haram.RemittanceSystem.Remittances
             TotalAmount = Amount + ((Amount * 5) / 100);
         }
 
-        public void ChangeStatus(StatusType status)
+        public void ChangeStatus()
         {
-            this.Status = status;
-            this.Statuses.Add(new Status
+            if (this.Status == StatusType.Issued)
             {
-                Type = status
-            });
+                this.Status = StatusType.Ready;
+                this.Statuses.Add(new Status
+                {
+                    Type = StatusType.Ready
+                });
+            }
+            else if (this.Status == StatusType.Ready)
+            {
+                this.Status = StatusType.Approved;
+                this.Statuses.Add(new Status
+                {
+                    Type = StatusType.Approved
+                });
+            }
+            else if (this.Status == StatusType.Approved)
+            {
+                this.Status = StatusType.Released;
+                this.Statuses.Add(new Status
+                {
+                    Type = StatusType.Released
+                });
+            }
+
         }
 
 

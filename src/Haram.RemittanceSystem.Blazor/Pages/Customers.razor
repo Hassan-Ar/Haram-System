@@ -35,7 +35,8 @@
                   ReadData="OnDataGridReadAsync"
                   TotalItems="TotalCount"
                   ShowPager="true"
-                  PageSize="PageSize">
+                  PageSize="PageSize"
+        >
 
             <DataGridColumns>
 
@@ -96,7 +97,7 @@
                                 Field="@nameof(CustomerDto.BirthDate)"
                                 Caption="BirthDate">
                     <DisplayTemplate>
-                        @context.BirthDate.ToShortDateString();
+                        @context.BirthDate.ToShortDateString()
                     </DisplayTemplate>
                 </DataGridColumn>
 
@@ -180,7 +181,16 @@
                     </Field>
                     <Field>
                         <FieldLabel>@L["BirthDate"]</FieldLabel>
-                            <DateEdit TValue="DateTime" @bind-Date="@NewEntity.BirthDate" />
+                            <Addons>
+                                <Addon AddonType="AddonType.Body">
+                                    <DatePicker @ref="@datePicker" TValue="DateTime" @bind-Date="@NewEntity.BirthDate" />
+                                </Addon>
+                                <Addon AddonType="AddonType.End">
+                                    <Button Color="Color.Light" Clicked="@(()=>datePicker.ToggleAsync())">
+                                        <Icon Name="IconName.CalendarDay" />
+                                    </Button>
+                                </Addon>
+                            </Addons>
                         </Field>
 
                         <Validation MessageLocalizer="@LH.Localize">
@@ -228,11 +238,11 @@
                 <CloseButton Clicked="CloseEditModalAsync"/>
             </ModalHeader>
             <ModalBody>
-                <Validations @ref="@EditValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                                 <FieldLabel>First Name</FieldLabel>
-                            <TextEdit @bind-Text="@NewEntity.FirstName">
+                            <TextEdit @bind-Text="@EditingEntity.FirstName">
                                 <Feedback>
                                     <ValidationError/>
                                 </Feedback>
@@ -242,7 +252,7 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>Last Name</FieldLabel>
-                                <TextEdit @bind-Text="@NewEntity.LastName">
+                                <TextEdit @bind-Text="@EditingEntity.FirstName">
                                     <Feedback>
                                         <ValidationError />
                                     </Feedback>
@@ -253,7 +263,7 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>Father Name</FieldLabel>
-                                <TextEdit @bind-Text="@NewEntity.FatherName">
+                                <TextEdit @bind-Text="@EditingEntity.FatherName">
                                     <Feedback>
                                         <ValidationError />
                                     </Feedback>
@@ -264,7 +274,7 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>Mother Name</FieldLabel>
-                                <TextEdit @bind-Text="@NewEntity.MotherName">
+                                <TextEdit @bind-Text="@EditingEntity.MotherName">
                                     <Feedback>
                                         <ValidationError />
                                     </Feedback>
@@ -274,7 +284,7 @@
 
                          <Field>
                             <FieldLabel>@L["Gender"]</FieldLabel>
-                            <Select TValue="Gender" @bind-SelectedValue="@NewEntity.CustGender">
+                            <Select TValue="Gender" @bind-SelectedValue="@EditingEntity.CustGender">
                                 @foreach (int gender in Enum.GetValues(typeof(Gender)))
                             {
                                 <SelectItem TValue="Gender" Value="@((Gender) gender)">
@@ -285,12 +295,12 @@
                     </Field>
                     <Field>
                         <FieldLabel>@L["BirthDate"]</FieldLabel>
-                            <DateEdit TValue="DateTime" @bind-Date="@NewEntity.BirthDate" />
+                            <DateEdit TValue="DateTime" @bind-Date="@EditingEntity.BirthDate" />
                         </Field>
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>Address</FieldLabel>
-                                <TextEdit @bind-Text="@NewEntity.Address">
+                                <TextEdit @bind-Text="@EditingEntity.Address">
                                     <Feedback>
                                         <ValidationError />
                                     </Feedback>
@@ -301,7 +311,7 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>Phone</FieldLabel>
-                                <TextEdit @bind-Text="@NewEntity.Phone">
+                                <TextEdit @bind-Text="@EditingEntity.Phone">
                                     <Feedback>
                                         <ValidationError />
                                     </Feedback>
@@ -322,5 +332,7 @@
         </Form>
     </ModalContent>
 </Modal>
-
+@code{
+    DatePicker<DateTime> datePicker;
+}
 

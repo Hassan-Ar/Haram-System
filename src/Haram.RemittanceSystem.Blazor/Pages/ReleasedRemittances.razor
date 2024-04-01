@@ -1,4 +1,4 @@
-﻿@page "/readyremittances"
+﻿@page "/releasedremittances"
 @using Haram.RemittanceSystem.Currencies
 @using Haram.RemittanceSystem.Customers
 @using Haram.RemittanceSystem.Localization
@@ -19,7 +19,7 @@
     -        <CardHeader>
         <Row Class="justify-content-between">
             <Column ColumnSize="ColumnSize.IsAuto">
-                <h2> Ready Remittances</h2>
+                <h2> Released  Remittances</h2>
             </Column>
         </Row>
     </CardHeader>
@@ -29,15 +29,10 @@
                   ReadData="OnDataGridReadAsync"
                   TotalItems="TotalCount"
                   ShowPager="true"
-                  PageSize="PageSize"
-      >
+                  PageSize="PageSize">
 
             <DataGridColumns>
-                <DataGridEntityActionsColumn TItem="RemittanceDto" @ref="@EntityActionsColumn">
-                    <DisplayTemplate>
-                        <Blazorise.Button Clicked="()=>SetAsApproved(context)" Color="Blazorise.Color.Secondary">set</Blazorise.Button>
-                    </DisplayTemplate>
-                </DataGridEntityActionsColumn>
+
 
                 <DataGridColumn TItem="RemittanceDto"
                                 Field="@nameof(RemittanceDto.Type)"
@@ -79,16 +74,36 @@
                 <DataGridColumn TItem="RemittanceDto"
                                 Caption="Sender Name">
                     <DisplayTemplate>
-                        @context.Sender.FirstName.ToString()-@context.Sender.LastName.ToString()
+                        @context.Sender.FirstName.ToString() @context.Sender.LastName.ToString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="RemittanceDto"
+                                Caption="Receiver Name">
+                    <DisplayTemplate>
+                        @context.Receiver.FirstName.ToString() @context.Receiver.LastName.ToString()
                     </DisplayTemplate>
                 </DataGridColumn>
 
                 <DataGridColumn TItem="RemittanceDto"
                                 Caption="IssuedBy">
                     <DisplayTemplate>
-                        @context.IssuedBy.Name.ToString()
+                        @context.IssuedBy.Name.ToString() 
                     </DisplayTemplate>
                 </DataGridColumn>
+                <DataGridColumn TItem="RemittanceDto"
+                                Caption="IssuedBy">
+                    <DisplayTemplate>
+                        @context.ApprovedBy.Name.ToString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="RemittanceDto"
+                                Caption="IssuedBy">
+                    <DisplayTemplate>
+                        @context.ReleasedBy.Name.ToString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+                
+
                 <DataGridColumn TItem="RemittanceDto"
                                 Field="@nameof(RemittanceDto.CreationTime)"
                                 Caption="CreationTime">
@@ -114,11 +129,12 @@
     </CardBody>
 </Card>
 
-@code{
-
+@code {
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
     private async Task GetRemittencAsync()
     {
-        GetListInput.Status = StatusType.Ready;
+        GetListInput.Status = StatusType.Released;
         var result = await AppService.GetListAsync(
             GetListInput
             );
@@ -131,12 +147,7 @@
         await GetRemittencAsync();
         await InvokeAsync(StateHasChanged);
     }
-    private async Task SetAsApproved(RemittanceDto remittanceDto)
-    {
-        await AppService.ChangeStatus(remittanceDto.Id, Guid.Empty);
-        await GetRemittencAsync();
-        await InvokeAsync(StateHasChanged);
-    }
+
 
 }
 

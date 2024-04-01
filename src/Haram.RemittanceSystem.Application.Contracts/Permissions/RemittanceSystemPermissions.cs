@@ -10,5 +10,21 @@ public static class RemittanceSystemPermissions
     {
         public const string Default = ".Remittances";
         public const string Create = Default + ".Create";
+        public const string Edit = Default + ".Edit";
+        public const string Delete = Default + ".Delete";
+    }
+    public static class Customer
+    {
+        public const string Default = ".Customer";
+        public const string Create = Default + ".Create";
+        public const string Edit = Default + ".Edit";
+        public const string Delete = Default + ".Delete";
+    }
+    public static class Currency
+    {
+        public const string Default = ".Customer";
+        public const string Create = Default + ".Create";
+        public const string Edit = Default + ".Edit";
+        public const string Delete = Default + ".Delete";
     }
 }

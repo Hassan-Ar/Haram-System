@@ -52,7 +52,7 @@ public class RemittanceSystemMenuContributor : IMenuContributor
                   new ApplicationMenuItem(
                       "Remittances",
                       l["Remittances"],
-                      icon: "fa fa-book"
+                      icon: "fa fa-wallet"
                   ).AddItem(
                       new ApplicationMenuItem(
                           "Remittances.Remittances",
@@ -74,13 +74,35 @@ public class RemittanceSystemMenuContributor : IMenuContributor
                           url: "/approvedremittances"
                       )
                   )
+                   .AddItem(
+                      new ApplicationMenuItem(
+                          "Remittances.ReleasedRemittances",
+                          l["Released Remittances"],
+                          url: "/releasedremittances"
+                      )
+                  )
+                   .AddItem(
+                      new ApplicationMenuItem(
+                          "Remittances.NewRemittance",
+                          l["Create Remittance"],
+                          url: "/createremittance"
+                      )
+                  )
               );
-
         context.Menu.AddItem(
+              new ApplicationMenuItem(
+                  "Home",
+                  l["test"],
+                  icon: "fa fa-book",
+                  url: "/homepage"
+
+              ));
+
+     context.Menu.AddItem(
                  new ApplicationMenuItem(
                      "Customers",
                      l["Customers"],
-                     icon: "fa fa-book"
+                      icon: "fa fa-user"
                  ).AddItem(
                      new ApplicationMenuItem(
                          "Customers.Customers",
@@ -89,12 +111,12 @@ public class RemittanceSystemMenuContributor : IMenuContributor
                      )
                  )
               );
-                      //currencies
+                      //currencies Column
      context.Menu.AddItem(
               new ApplicationMenuItem(
               "Currencies",
               l["Currencies"],
-              icon: "fa fa-book"
+              icon: "fa fa-moneybillalt"
               ).AddItem(
               new ApplicationMenuItem(
                  "Currencies.currencies",

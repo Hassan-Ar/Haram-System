@@ -8,9 +8,14 @@ public class RemittanceSystemPermissionDefinitionProvider : PermissionDefinition
 {
     public override void Define(IPermissionDefinitionContext context)
     {
-        var myGroup = context.AddGroup(RemittanceSystemPermissions.GroupName);
-        //Define your own permissions here. Example:
-        myGroup.AddPermission(RemittanceSystemPermissions.Remittances.Default, L("Permission:Remittances")).AddChild(RemittanceSystemPermissions.Remittances.Create);
+
+        var Group = context.AddGroup(RemittanceSystemPermissions.GroupName, L("Permission:RemittancesSystem"));
+
+        var RemittancePermission = Group.AddPermission(RemittanceSystemPermissions.Remittances.Default, L("Permission:Remittances Management"));
+        RemittancePermission.AddChild(RemittanceSystemPermissions.Remittances.Create, L("Permission:Create"));
+        RemittancePermission.AddChild(RemittanceSystemPermissions.Remittances.Edit, L("Permission:Edit"));
+        RemittancePermission.AddChild(RemittanceSystemPermissions.Remittances.Delete, L("Permission:Delete"));
+
     }
 
     private static LocalizableString L(string name)

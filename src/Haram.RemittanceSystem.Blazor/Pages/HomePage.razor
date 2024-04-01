@@ -1,0 +1,69 @@
+﻿@page "/homepage"
+
+
+<Container Class="text-center">
+    <Row Class="mt-5">
+        <Column>
+            <h1 class="display-4">Welcome to Money Remittance System</h1>
+            <p class="lead">Send money to your loved ones across the globe with ease!</p>
+        </Column>
+    </Row>
+    <Row Class="mt-5">
+        <Column>
+            <h2 class="mb-4">Our Services</h2>
+        </Column>
+    </Row>
+    <Row Class="mt-4">
+        <Column md="4">
+            <Card Class="h-100">
+                <CardBody>
+                    <h3 class="card-title">Send Money</h3>
+                    <p class="card-text">Easily send money to your family and friends worldwide.</p>
+                    <Button Columnor="Columnor.Primary" Size="Size.Large" Clicked="NavigateToSendMoney">Learn More</Button>
+                </CardBody>
+            </Card>
+        </Column>
+        <Column md="4">
+            <Card Class="h-100">
+                <CardBody>
+                    <h3 class="card-title">Receive Money</h3>
+                    <p class="card-text">Receive money securely and conveniently from anywhere.</p>
+                    <Button Columnor="Columnor.Primary" Size="Size.Large" Clicked="NavigateToReceiveMoney">Learn More</Button>
+                </CardBody>
+            </Card>
+        </Column>
+        <Column md="4">
+            <Card Class="h-100">
+                <CardBody>
+                    <h3 class="card-title">Track Transactions</h3>
+                    <p class="card-text">Track the status of your transactions in real-time.</p>
+                    <Button Columnor="Columnor.Primary" Size="Size.Large" Clicked="NavigateToTrackTransactions">Learn More</Button>
+                </CardBody>
+            </Card>
+        </Column>
+    </Row>
+</Container>
+
+@code {
+    private void NavigateToSendMoney()
+    {
+        // Redirect to send money page
+        NavigationManager.NavigateTo("/send-money");
+    }
+
+    private void NavigateToReceiveMoney()
+    {
+        // Redirect to receive money page
+        NavigationManager.NavigateTo("/receive-money");
+    }
+
+    private void NavigateToTrackTransactions()
+    {
+        // Redirect to track transactions page
+        NavigationManager.NavigateTo("/track-transactions");
+    }
+
+    // Inject NavigationManager for navigation functionality
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+}

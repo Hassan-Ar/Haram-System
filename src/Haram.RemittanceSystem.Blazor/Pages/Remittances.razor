@@ -7,6 +7,9 @@
 @using Microsoft.Extensions.Localization
 @using Volo.Abp.AspNetCore.Components.Web
 @using Haram.RemittanceSystem.RemittanceTypes
+@attribute [Authorize(RemittanceSystemPermissions.Remittances.Create)]
+@using Haram.RemittanceSystem.Permissions
+@using Microsoft.AspNetCore.Authorization
 @inject ICurrencyAppService currencyappservice
 @inject ICustomerAppService customerappservice
 @inject IRemittanceAppServices remittanceappservice
@@ -23,41 +26,11 @@
                 <Column ColumnSize="ColumnSize.IsAuto">
                     <Button Color="Color.Primary"
                             Clicked="OpenCreateModalAsync">
-                        NewBook
+                        New Remittance
                     </Button>
+                
                 </Column>
-
-            <Column ColumnSize="ColumnSize.IsAuto">
-             <Label> Type</Label>
-            <Select TValue="RemittanceType"   @bind-SelectedValue=@type >
-                    <SelectItem TValue="RemittanceType" >
-                        None
-                    </SelectItem>
-                @foreach (int type in Enum.GetValues(typeof(RemittanceType)))
-                {
-                        <SelectItem TValue="RemittanceType" Value="@((RemittanceType) type)">
-                            @type.ToString()
-                    </SelectItem>
-                }
-            </Select>
-            </Column>
-            <Column ColumnSize="ColumnSize.IsAuto">
-                <Label> Status</Label>
-                <Select TValue="StatusTypes.StatusType " @bind-SelectedValue="@statusType" >
-                    <SelectItem TValue="StatusTypes.StatusType" Value="@((StatusTypes.StatusType) statusType)">
-
-                    </SelectItem>
-                    @foreach (int status in Enum.GetValues(typeof(StatusTypes.StatusType)))
-                    {
-                        <SelectItem TValue="StatusTypes.StatusType" Value="@((StatusTypes.StatusType) status)">
-                            @status
-                        </SelectItem>
-                    }
-                </Select>
-            </Column>
-
             </Row>
-            <Button @onclick=applyFilter>Click</Button>
         </CardHeader>
     <CardBody>
         <DataGrid TItem="RemittanceDto"
@@ -79,24 +52,57 @@
                                           Text="Delete]"
                                           Clicked="() => DeleteEntityAsync(context)"
                                           ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)" />
-
-
+                            <EntityAction TItem="RemittanceDto"
+                                          Text="Set Ready]"
+                                          Clicked="() => SetAsReady(context)" />
+                                                                              
                         </EntityActions>
                     </DisplayTemplate>
                 </DataGridEntityActionsColumn>
-                <DataGridEntityActionsColumn TItem="RemittanceDto" @ref="@EntityActionsColumn">
-                    <DisplayTemplate>
-                        <Blazorise.Button Clicked="()=>SetAsReady(context)" Color="Blazorise.Color.Secondary">set</Blazorise.Button>
-                    </DisplayTemplate>
-                </DataGridEntityActionsColumn>
-
                 <DataGridColumn TItem="RemittanceDto"
                                 Field="@nameof(RemittanceDto.Type)"
-                                Caption="Type">
+                                Caption=@L["Type"]>
                     <DisplayTemplate>
                         @context.Type
                     </DisplayTemplate>
                 </DataGridColumn>
+
+                <DataGridColumn TItem="RemittanceDto"
+                                Field="@nameof(RemittanceDto.Status)"
+                                Caption=@L["Status"]>
+                    <DisplayTemplate>
+                        @context.Status
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="RemittanceDto"
+                                Field="@nameof(RemittanceDto.Amount)"
+                                Caption=@L["Ammount"]>
+                    <DisplayTemplate>
+                        @context.Amount
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="RemittanceDto"
+                                Field="@nameof(RemittanceDto.TotalAmount)"
+                                Caption=@L["Total Ammount"]>
+                    <DisplayTemplate>
+                        @context.TotalAmount
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="RemittanceDto"
+                                Field="@nameof(RemittanceDto.Status)"
+                                Caption=@L["Status"]>
+                    <DisplayTemplate>
+                        @context.Status
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="RemittanceDto"
+                                Caption="Sender Name">
+                    <DisplayTemplate>
+                        @context.Sender.FirstName.ToString()-@context.Sender.LastName.ToString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+
                 <DataGridColumn TItem="RemittanceDto"
                                 Field="@nameof(RemittanceDto.CreationTime)"
                                 Caption="CreationTime">
@@ -105,11 +111,16 @@
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="RemittanceDto"
+                                Field="@nameof(RemittanceDto.LastModificationTime)"
+                                Caption="Seted ready Date">
+                    <DisplayTemplate>
+                        @context.LastModificationTime
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="RemittanceDto"
                                 Field="@nameof(RemittanceDto.Amount)"
                                 Caption="Amount">
                 </DataGridColumn>
-    
-
             </DataGridColumns>
         </DataGrid>
     </CardBody>
@@ -190,3 +201,6 @@
     </ModalContent>
 </Modal>
 
+@code{
+
+}

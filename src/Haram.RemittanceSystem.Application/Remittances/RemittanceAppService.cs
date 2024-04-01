@@ -15,24 +15,33 @@ using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using Haram.RemittanceSystem.Permissions;
 using Volo.Abp.Users;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Haram.RemittanceSystem.Remittances
 {
+
     public class RemittanceAppService : CrudAppService<Remittance, RemittanceDto, Guid, GetListRemittancesInputDto, CreateUpdateRemittanceDto>, IRemittanceAppServices
     {
         private readonly ICurrencyRepository _currencyRepository;
         private readonly IRepository<IdentityUser> _userRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly ICurrentUser _user;
+        private readonly IIdentityRoleRepository _roleRepository;
         private readonly IRemittanceRepository _remittancerepository;
 
-        public RemittanceAppService(IRepository<Remittance, Guid> repository, ICustomerRepository customerRepository, IRepository<IdentityUser> userRepository, ICurrencyRepository currencyRepository, ICurrentUser user, IRemittanceRepository remittancerepository) : base(repository)
+        public RemittanceAppService(IRepository<Remittance, Guid> repository, ICustomerRepository customerRepository, IRepository<IdentityUser> userRepository, ICurrencyRepository currencyRepository, ICurrentUser user, IRemittanceRepository remittancerepository, IIdentityRoleRepository roleRepository) : base(repository)
         {
             _customerRepository = customerRepository;
             _userRepository = userRepository;
             _currencyRepository = currencyRepository;
             _user = user;
             _remittancerepository = remittancerepository;
+            GetPolicyName = RemittanceSystemPermissions.Remittances.Default;
+            GetListPolicyName = RemittanceSystemPermissions.Remittances.Default;
+            CreatePolicyName = RemittanceSystemPermissions.Remittances.Create;
+            UpdatePolicyName = RemittanceSystemPermissions.Remittances.Edit;
+            DeletePolicyName = RemittanceSystemPermissions.Remittances.Delete;
+            _roleRepository = roleRepository;
             // CreatePolicyName = RemittanceSystemPermissions.Remittances.Create;
         }
 
@@ -51,12 +60,13 @@ namespace Haram.RemittanceSystem.Remittances
                 throw new UserFriendlyException("Remittance sender is not found ");
             }
 
+
             var currency = (await _currencyRepository.GetQueryableAsync()).FirstOrDefault(x => x.Id == input.CurrencyID);
             if ((input.Type == RemittanceTypes.RemittanceType.Internal && currency.AlphabeticCode != "SYP") || (input.Type == RemittanceTypes.RemittanceType.External && currency.AlphabeticCode == "SYP"))
             {
                 throw new UserFriendlyException(" You Can only use SYP Currency With Internal Remittance , Internal Remittance only with SYP currency");
             }
-            
+
             var user = (await _userRepository.GetQueryableAsync()).FirstOrDefault(x => x.Id == _user.Id);
             if (user is null)
             {
@@ -66,7 +76,6 @@ namespace Haram.RemittanceSystem.Remittances
             remittance.IssuedBy = user;
             remittance.Sender = sender;
             remittance.SetAmmount(input.Amount);
-            remittance.ChangeStatus(StatusType.Issued);
             await Repository.InsertAsync(remittance);
             return MapToGetOutputDto(remittance);
         }
@@ -101,7 +110,7 @@ namespace Haram.RemittanceSystem.Remittances
         //TODO: rewrite 
         protected async override Task<IQueryable<Remittance>> CreateFilteredQueryAsync(GetListRemittancesInputDto input)
         {
-            var x =( await _remittancerepository.GetRemittancesWithData())
+            var x = (await _remittancerepository.GetRemittancesWithData())
                 .WhereIf(input.Type.HasValue, x => x.Type == input.Type)
                 .WhereIf(input.Status.HasValue, x => x.Status == input.Status)
                 .PageBy(input.SkipCount, input.MaxResultCount);
@@ -119,7 +128,7 @@ namespace Haram.RemittanceSystem.Remittances
         /// <returns></returns>
         /// <exception cref="UserFriendlyException"></exception>
         //TODO: Change the roles
-        public async Task<RemittanceDto> ChangeStatus(Guid id , Guid? receiverId = null)
+        public async Task<RemittanceDto> ChangeStatus(Guid id, Guid? receiverId = null)
         {
             var remittance = (await Repository.GetQueryableAsync()).FirstOrDefault(x => x.Id == id);
             //Check for null remit id
@@ -127,53 +136,42 @@ namespace Haram.RemittanceSystem.Remittances
             {
                 throw new UserFriendlyException(L["Remittance not found"]);
             }
+
             var userId = _user.Id;
-            var user = (await _userRepository.GetQueryableAsync()).FirstOrDefault(x => x.Id == userId);
+            var user = (await _userRepository.WithDetailsAsync()).FirstOrDefault(x => x.Id == userId);
+            //Check for user
+            if (user is null)
+            {
+                throw new UserFriendlyException(L["An authorized User"]);
+            }
+
             //Check for  the last status if it was Issued(draft) 
             if (remittance.Status == StatusType.Issued)
             {
-                //Check for the requierd Role
-                //if (_user.Roles.Contains("User1"))
-                //{
-                    remittance.ChangeStatus(StatusType.Ready);
-                //}
-                //else
-                //{
-                //    throw new UserFriendlyException(L["User dose not have the Permission to change the status"]);
-                //}
+                SetReady(remittance);
+                remittance.IssuedBy = user;
             }
             //Check for  the last status if it was Ready
             else if (remittance.Status == StatusType.Ready)
             {
                 //Check for the requierd Role
-                //if (_user.Roles.Contains("User2"))
-                //{
-                    remittance.ChangeStatus(StatusType.Approved);
-                //}
-                //else
-                //{
-                //    throw new UserFriendlyException(L["User dose not have the Permission to change the status"]);
-                //}
+                SetApproved(remittance);
+                remittance.ApprovedBy = user;
             }
             //Check for  the last status if it was Approved
             else if (remittance.Status == StatusType.Approved)
             {
-                //Check for the requierd Role
-                //if (_user.Roles.Contains("User3"))
-                //{
-                    var receiver = (await _customerRepository.GetQueryableAsync()).FirstOrDefault(x => x.Id == receiverId);
-                    if (receiver is null)
-                    {
-                        throw new UserFriendlyException(L["Remittance receiver not found"]);
-                    }
-                    remittance.Receiver = receiver;
-                    remittance.ChangeStatus(StatusType.Released);
-                //}
-                //else
-                //{
-                //    throw new UserFriendlyException(L["User dose not have the Permission to change the status"]);
-                //}
+                var receiver = (await _customerRepository.GetQueryableAsync()).FirstOrDefault(x => x.Id == receiverId);
+                //Check for the Receiver Role
+                if (receiver is null)
+                {
+                    throw new UserFriendlyException(L["Remittance receiver not found"]);
+                }
+                remittance.Receiver = receiver;
+                SetReleased(remittance);
+                remittance.ReleasedBy = user;
             }
+
             //Check for  the last status if it was Released
             else if (remittance.Status == StatusType.Released)
             {
@@ -205,6 +203,30 @@ namespace Haram.RemittanceSystem.Remittances
             }
             await base.DeleteByIdAsync(id);
             return;
+        }
+
+        [Authorize(Roles = "Admin")]
+        private void SetReady(Remittance remittance)
+        {
+
+            remittance.ChangeStatus();
+
+        }
+
+        [Authorize(Roles = "Admin")]
+        private void SetApproved(Remittance remittance)
+        {
+
+            remittance.ChangeStatus();
+
+        }
+
+        [Authorize(Roles = "Admin")]
+        private void SetReleased(Remittance remittance)
+        {
+
+            remittance.ChangeStatus();
+
         }
 
     }
