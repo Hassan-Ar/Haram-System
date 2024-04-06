@@ -19,12 +19,12 @@
 -        <CardHeader>
             <Row Class="justify-content-between">
                 <Column ColumnSize="ColumnSize.IsAuto">
-                    <h2>Curenncies</h2>
+                <h2>@L["Currencies"]</h2>
                 </Column>
                 <Column ColumnSize="ColumnSize.IsAuto">
                     <Button Color="Color.Primary"
                             Clicked="OpenCreateModalAsync">
-                        New Currency
+                    @L["NewCurrency"]
                     </Button>
                 </Column>
             </Row>
@@ -42,10 +42,10 @@
                     <DisplayTemplate>
                         <EntityActions TItem="CurrencyDto" EntityActionsColumn="@EntityActionsColumn">
                             <EntityAction TItem="CurrencyDto"
-                                          Text="Edite"
+                                          Text=@L["Edit"]
                                           Clicked="() => OpenEditModalAsync(context)" />
                             <EntityAction TItem="CurrencyDto"
-                                          Text="Delete]"
+                                          Text=@L["Delete"]
                                           Clicked="() => DeleteEntityAsync(context)"
                                           ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)" />
                         </EntityActions>
@@ -61,7 +61,7 @@
 
                 <DataGridColumn TItem="CurrencyDto"
                                 Field="@nameof(CurrencyDto.AlphabeticCode)"
-                                Caption="@L["Code"]">
+                                Caption=@L["AlphabeticCode"]>
                     <DisplayTemplate>
                         @context.AlphabeticCode
                     </DisplayTemplate>
@@ -76,14 +76,14 @@
     <ModalContent IsCentered="true">
         <Form>
             <ModalHeader>
-                <ModalTitle>@L["New Currency"]</ModalTitle>
+                <ModalTitle>@L["NewCurrency"]</ModalTitle>
                 <CloseButton Clicked="CloseCreateModalAsync"/>
             </ModalHeader>
             <ModalBody>
                 <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
-                                <FieldLabel>Name</FieldLabel>
+                                <FieldLabel>@L["Name"]</FieldLabel>
                             <TextEdit @bind-Text="@NewEntity.Name">
                                 <Feedback>
                                     <ValidationError/>
@@ -93,7 +93,7 @@
                     </Validation>
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>Code</FieldLabel>
+                                <FieldLabel>@L["AlphabeticCode"]</FieldLabel>
                                 <TextEdit @bind-Text="@NewEntity.AlphabeticCode">
                                     <Feedback>
                                         <ValidationError />
@@ -127,7 +127,7 @@
                     <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>Name</FieldLabel>
+                                <FieldLabel>@L["Name"]</FieldLabel>
                                 <TextEdit @bind-Text="@NewEntity.Name">
                                     <Feedback>
                                         <ValidationError />
@@ -137,7 +137,7 @@
                         </Validation>
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>Code</FieldLabel>
+                                <FieldLabel>@L["AlphabeticCode"]</FieldLabel>
                                 <TextEdit @bind-Text="@NewEntity.AlphabeticCode">
                                     <Feedback>
                                         <ValidationError />
@@ -158,5 +158,7 @@
         </Form>
     </ModalContent>
 </Modal>
+@code{
 
+}
 

@@ -19,7 +19,7 @@
     -        <CardHeader>
         <Row Class="justify-content-between">
             <Column ColumnSize="ColumnSize.IsAuto">
-                <h2> Released  Remittances</h2>
+                <h2>@L["ReleasedRemittances"] </h2>
             </Column>
         </Row>
     </CardHeader>
@@ -33,22 +33,15 @@
 
             <DataGridColumns>
 
-
                 <DataGridColumn TItem="RemittanceDto"
                                 Field="@nameof(RemittanceDto.Type)"
                                 Caption=@L["Type"]>
                     <DisplayTemplate>
-                        @context.Type
+                        @L[$"Enum:RemittanceType.{(int)context.Type}"]
                     </DisplayTemplate>
                 </DataGridColumn>
 
-                <DataGridColumn TItem="RemittanceDto"
-                                Field="@nameof(RemittanceDto.Status)"
-                                Caption=@L["Status"]>
-                    <DisplayTemplate>
-                        @context.Status
-                    </DisplayTemplate>
-                </DataGridColumn>
+
                 <DataGridColumn TItem="RemittanceDto"
                                 Field="@nameof(RemittanceDto.Amount)"
                                 Caption=@L["Ammount"]>
@@ -58,7 +51,7 @@
                 </DataGridColumn>
                 <DataGridColumn TItem="RemittanceDto"
                                 Field="@nameof(RemittanceDto.TotalAmount)"
-                                Caption=@L["Total Ammount"]>
+                                Caption=@L["TotalAmmount"]>
                     <DisplayTemplate>
                         @context.TotalAmount
                     </DisplayTemplate>
@@ -72,57 +65,57 @@
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="RemittanceDto"
-                                Caption="Sender Name">
+                                Caption=@L["Sender"]>
                     <DisplayTemplate>
                         @context.Sender.FirstName.ToString() @context.Sender.LastName.ToString()
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="RemittanceDto"
-                                Caption="Receiver Name">
+                                Caption=@L["Receiver"]>
                     <DisplayTemplate>
                         @context.Receiver.FirstName.ToString() @context.Receiver.LastName.ToString()
                     </DisplayTemplate>
                 </DataGridColumn>
-
-                <DataGridColumn TItem="RemittanceDto"
-                                Caption="IssuedBy">
-                    <DisplayTemplate>
-                        @context.IssuedBy.Name.ToString() 
-                    </DisplayTemplate>
-                </DataGridColumn>
-                <DataGridColumn TItem="RemittanceDto"
-                                Caption="IssuedBy">
-                    <DisplayTemplate>
-                        @context.ApprovedBy.Name.ToString()
-                    </DisplayTemplate>
-                </DataGridColumn>
-                <DataGridColumn TItem="RemittanceDto"
-                                Caption="IssuedBy">
-                    <DisplayTemplate>
-                        @context.ReleasedBy.Name.ToString()
-                    </DisplayTemplate>
-                </DataGridColumn>
-                
-
                 <DataGridColumn TItem="RemittanceDto"
                                 Field="@nameof(RemittanceDto.CreationTime)"
-                                Caption="CreationTime">
+                                Caption=@L["CreationTime"]>
                     <DisplayTemplate>
                         @context.CreationTime.ToShortDateString()
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="RemittanceDto"
                                 Field="@nameof(RemittanceDto.LastModificationTime)"
-                                Caption="Seted ready Date">
+                                Caption=@L["LastModificationTime"]>
                     <DisplayTemplate>
                         @context.LastModificationTime
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="RemittanceDto"
-                                Field="@nameof(RemittanceDto.Amount)"
-                                Caption="Amount">
+                                Caption="@L["IssuedBy"]">
+                    <DisplayTemplate>
+                        @context.IssuedBy.Name.ToString() 
+                    </DisplayTemplate>
                 </DataGridColumn>
-
+                <DataGridColumn TItem="RemittanceDto"
+                                Caption="@L["ApprovedBy"]">
+                    <DisplayTemplate>
+                        @context.ApprovedBy.Name.ToString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="RemittanceDto"
+                                Caption="@L["ReleasedBy"]">
+                    <DisplayTemplate>
+                        @context.ReleasedBy.Name.ToString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+                
+                <DataGridColumn TItem="RemittanceDto"
+                                Field="@nameof(RemittanceDto.Status)"
+                                Caption=@L["Status"]>
+                    <DisplayTemplate>
+                        @L[$"Enum:StatusType.{(int)context.Status}"]
+                    </DisplayTemplate>
+                </DataGridColumn>
 
             </DataGridColumns>
         </DataGrid>
@@ -130,8 +123,8 @@
 </Card>
 
 @code {
-    [Inject]
-    public NavigationManager NavigationManager { get; set; }
+
+    //  to get released Remittances
     private async Task GetRemittencAsync()
     {
         GetListInput.Status = StatusType.Released;
@@ -141,6 +134,8 @@
         Entities = result.Items;
         TotalCount = (int)result.TotalCount;
     }
+
+    // overriding  OnDataGridReadAsync to get released Remittances
     protected override async Task OnDataGridReadAsync(DataGridReadDataEventArgs<RemittanceDto> e)
     {
         //_logger.LogInformation("On Data Grid executed");

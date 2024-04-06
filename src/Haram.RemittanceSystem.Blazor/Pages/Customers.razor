@@ -19,12 +19,12 @@
 -        <CardHeader>
             <Row Class="justify-content-between">
                 <Column ColumnSize="ColumnSize.IsAuto">
-                    <h2>Customers</h2>
+                <h2>@L["Customers"]</h2>
                 </Column>
                 <Column ColumnSize="ColumnSize.IsAuto">
                     <Button Color="Color.Primary"
                             Clicked="OpenCreateModalAsync">
-                        New Customer
+                    @L["NewCustomer"]
                     </Button>
                 </Column>
             </Row>
@@ -44,10 +44,10 @@
                     <DisplayTemplate>
                         <EntityActions TItem="CustomerDto" EntityActionsColumn="@EntityActionsColumn">
                             <EntityAction TItem="CustomerDto"
-                                          Text="Edite"
+                                          Text=@L["Edit"]
                                           Clicked="() => OpenEditModalAsync(context)" />
                             <EntityAction TItem="CustomerDto"
-                                          Text="Delete]"
+                                          Text=@L["Delete"]
                                           Clicked="() => DeleteEntityAsync(context)"
                                           ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)" />
                         </EntityActions>
@@ -55,7 +55,7 @@
                 </DataGridEntityActionsColumn>
                 <DataGridColumn TItem="CustomerDto"
                                 Field="@nameof(CustomerDto.FirstName)"
-                                Caption="First Name">
+                                Caption="@L["FirstName"]">
                     <DisplayTemplate>
                         @context.FirstName
                     </DisplayTemplate>
@@ -63,7 +63,7 @@
 
                 <DataGridColumn TItem="CustomerDto"
                                 Field="@nameof(CustomerDto.LastName)"
-                                Caption="Last Name">
+                                Caption="@L["LastName"]">
                     <DisplayTemplate>
                         @context.LastName
                     </DisplayTemplate>
@@ -71,7 +71,7 @@
 
                 <DataGridColumn TItem="CustomerDto"
                                 Field="@nameof(CustomerDto.FatherName)"
-                                Caption="Father Name">
+                                Caption="@L["FatherName"]">
                     <DisplayTemplate>
                         @context.FatherName
                     </DisplayTemplate>
@@ -80,22 +80,29 @@
 
                 <DataGridColumn TItem="CustomerDto"
                                 Field="@nameof(CustomerDto.Phone)"
-                                Caption="Phone">
+                                Caption="@L["MotherName"]">
                     <DisplayTemplate>
                         @context.Phone
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="CustomerDto"
                                 Field="@nameof(CustomerDto.Address)"
-                                Caption="Address">
+                                Caption="@L["Address"]">
                     <DisplayTemplate>
                         @context.Address
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="CustomerDto"
+                                Field="@nameof(CustomerDto.FatherName)"
+                                Caption="@L["Gender"]">
+                    <DisplayTemplate>
+                        @L[$"Enum:Gender.{(int)context.CustGender}"]
                     </DisplayTemplate>
                 </DataGridColumn>
 
                 <DataGridColumn TItem="CustomerDto"
                                 Field="@nameof(CustomerDto.BirthDate)"
-                                Caption="BirthDate">
+                                Caption="@L["BirthDate"]">
                     <DisplayTemplate>
                         @context.BirthDate.ToShortDateString()
                     </DisplayTemplate>
@@ -103,7 +110,7 @@
 
                 <DataGridColumn TItem="CustomerDto"
                                 Field="@nameof(CustomerDto.CreationTime)"
-                                Caption="Regsterd in">
+                                Caption="@L["Regsterdin"]">
                     <DisplayTemplate>
                         @context.CreationTime.ToShortDateString()
                     </DisplayTemplate>
@@ -120,14 +127,14 @@
     <ModalContent IsCentered="true">
         <Form>
             <ModalHeader>
-                <ModalTitle>@L["New Customer"]</ModalTitle>
+                <ModalTitle>@L["NewCustomer"]</ModalTitle>
                 <CloseButton Clicked="CloseCreateModalAsync"/>
             </ModalHeader>
             <ModalBody>
                 <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
-                                <FieldLabel>First Name</FieldLabel>
+                                <FieldLabel>@L["FirstName"]</FieldLabel>
                             <TextEdit @bind-Text="@NewEntity.FirstName">
                                 <Feedback>
                                     <ValidationError/>
@@ -137,7 +144,7 @@
                     </Validation>
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>Last Name</FieldLabel>
+                                <FieldLabel>@L["LastName"]</FieldLabel>
                                 <TextEdit @bind-Text="@NewEntity.LastName">
                                     <Feedback>
                                         <ValidationError />
@@ -148,7 +155,7 @@
 
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>Father Name</FieldLabel>
+                                <FieldLabel>@L["FatherName"]</FieldLabel>
                                 <TextEdit @bind-Text="@NewEntity.FatherName">
                                     <Feedback>
                                         <ValidationError />
@@ -159,7 +166,7 @@
 
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>Mother Name</FieldLabel>
+                                <FieldLabel>@L["MotherName"]</FieldLabel>
                                 <TextEdit @bind-Text="@NewEntity.MotherName">
                                     <Feedback>
                                         <ValidationError />
@@ -174,7 +181,7 @@
                            @foreach (int gender in Enum.GetValues(typeof(Gender)))
                        {
                            <SelectItem TValue="Gender" Value="@((Gender) gender)">
-                               @gender
+                                    @L[$"Enum:Gender.{(int)gender}"]
                            </SelectItem>
                        }
                         </Select>
@@ -195,7 +202,7 @@
 
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>Address</FieldLabel>
+                                <FieldLabel>@L["Address"]</FieldLabel>
                                 <TextEdit @bind-Text="@NewEntity.Address">
                                     <Feedback>
                                         <ValidationError />
@@ -206,7 +213,7 @@
 
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>Phone</FieldLabel>
+                                <FieldLabel>@L["Phone"]</FieldLabel>
                                 <TextEdit @bind-Text="@NewEntity.Phone">
                                     <Feedback>
                                         <ValidationError />
@@ -241,7 +248,7 @@
                 <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
-                                <FieldLabel>First Name</FieldLabel>
+                                <FieldLabel>@L["FirstName"]</FieldLabel>
                             <TextEdit @bind-Text="@EditingEntity.FirstName">
                                 <Feedback>
                                     <ValidationError/>
@@ -251,7 +258,7 @@
                     </Validation>
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>Last Name</FieldLabel>
+                                <FieldLabel>@L["LastName"]</FieldLabel>
                                 <TextEdit @bind-Text="@EditingEntity.FirstName">
                                     <Feedback>
                                         <ValidationError />
@@ -262,7 +269,7 @@
 
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>Father Name</FieldLabel>
+                                <FieldLabel>@L["FatherName"]</FieldLabel>
                                 <TextEdit @bind-Text="@EditingEntity.FatherName">
                                     <Feedback>
                                         <ValidationError />
@@ -273,7 +280,7 @@
 
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>Mother Name</FieldLabel>
+                                <FieldLabel>@L["MotherName"]</FieldLabel>
                                 <TextEdit @bind-Text="@EditingEntity.MotherName">
                                     <Feedback>
                                         <ValidationError />
@@ -288,7 +295,7 @@
                                 @foreach (int gender in Enum.GetValues(typeof(Gender)))
                             {
                                 <SelectItem TValue="Gender" Value="@((Gender) gender)">
-                                    @gender
+                                    @L[$"Enum:Gender.{(int)gender}"]
                                 </SelectItem>
                             }
                         </Select>
@@ -299,7 +306,7 @@
                         </Field>
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>Address</FieldLabel>
+                                <FieldLabel>@L["Address"]</FieldLabel>
                                 <TextEdit @bind-Text="@EditingEntity.Address">
                                     <Feedback>
                                         <ValidationError />
@@ -310,7 +317,7 @@
 
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>Phone</FieldLabel>
+                                <FieldLabel>@L["Phone"]</FieldLabel>
                                 <TextEdit @bind-Text="@EditingEntity.Phone">
                                     <Feedback>
                                         <ValidationError />

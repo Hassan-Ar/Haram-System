@@ -83,11 +83,17 @@
         </Form>
 
     @code{
+
     [Inject]
     public NavigationManager NavigationManager { get; set; }
+
     public ICollection<CurrencyDto> Currencies { get; set; }
+
     public ICollection<CustomerDto> Customers { get; set; }
+
     public NavigationManager navigationManager;
+
+    // overriding the OnInitializedAsync to get Currencies and Customers Lists
     protected override async Task OnInitializedAsync()
     {
         Currencies = (await currencyappservice.GetListAsync(new PagedAndSortedResultRequestDto())).Items.ToList();

@@ -9,6 +9,6 @@ namespace Haram.RemittanceSystem.Currencies
 {
     public  interface ICurrencyRepository : IRepository<Currency,Guid>
     {
-
+        public Task<Currency> GetwithoutPaged();
     }
 }

@@ -11,5 +11,8 @@ namespace Haram.RemittanceSystem.Remittances
     {
         public RemittanceType? Type { get; set; }
         public StatusType? Status { get; set; }
+        public string? name { get; set; }
+        public DateTime? FirstDate { get; set; }
+        public DateTime? SecondDate { get; set; }
     }
 }

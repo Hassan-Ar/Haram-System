@@ -9,7 +9,7 @@ using System.Text;
 using Volo.Abp.Application.Dtos;
 
 namespace Haram.RemittanceSystem.Remittances
-{
+{ 
     public class CreateUpdateRemittanceDto : EntityDto
     {
         public Guid? Id { get; set; }
@@ -27,5 +27,6 @@ namespace Haram.RemittanceSystem.Remittances
         [Required]
         public Guid CurrencyID { get; set; }
         public Guid? ReciverId { get; set; }
+        public double? TotalAmount { get; set; }
     }
 }

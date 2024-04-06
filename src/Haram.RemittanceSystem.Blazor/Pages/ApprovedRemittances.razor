@@ -19,7 +19,7 @@
     -        <CardHeader>
         <Row Class="justify-content-between">
             <Column ColumnSize="ColumnSize.IsAuto">
-                <h2> Approved Remittances</h2>
+                <h2>@L["ApprovedRemittances"] </h2>
             </Column>
         </Row>
     </CardHeader>
@@ -30,12 +30,12 @@
                   TotalItems="TotalCount"
                   ShowPager="true"
                   PageSize="PageSize"
-                  Filterable=true>
+                  >
 
             <DataGridColumns>
                 <DataGridEntityActionsColumn TItem="RemittanceDto" @ref="@EntityActionsColumn">
                     <DisplayTemplate>
-                        <Blazorise.Button Clicked="()=> OpenEditModalAsync(context)" Color="Blazorise.Color.Secondary">Release</Blazorise.Button>
+                        <Blazorise.Button Clicked="()=> OpenEditModalAsync(context)" Color="Blazorise.Color.Secondary">@L["SetRelease"]</Blazorise.Button>
                     </DisplayTemplate>
                 </DataGridEntityActionsColumn>
 
@@ -44,15 +44,7 @@
                                 Field="@nameof(RemittanceDto.Type)"
                                 Caption=@L["Type"]>
                     <DisplayTemplate>
-                        @context.Type
-                    </DisplayTemplate>
-                </DataGridColumn>
-
-                <DataGridColumn TItem="RemittanceDto"
-                                Field="@nameof(RemittanceDto.Status)"
-                                Caption=@L["Status"]>
-                    <DisplayTemplate>
-                        @context.Status
+                            @L[$"Enum:RemittanceType.{(int)context.Type}"]
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="RemittanceDto"
@@ -64,21 +56,14 @@
                 </DataGridColumn>
                 <DataGridColumn TItem="RemittanceDto"
                                 Field="@nameof(RemittanceDto.TotalAmount)"
-                                Caption=@L["Total Ammount"]>
+                                Caption=@L["TotalAmmount"]>
                     <DisplayTemplate>
                         @context.TotalAmount
                     </DisplayTemplate>
                 </DataGridColumn>
 
                 <DataGridColumn TItem="RemittanceDto"
-                                Field="@nameof(RemittanceDto.Status)"
-                                Caption=@L["Status"]>
-                    <DisplayTemplate>
-                        @context.Status
-                    </DisplayTemplate>
-                </DataGridColumn>
-                <DataGridColumn TItem="RemittanceDto"
-                                Caption="Sender Name">
+                                Caption=@L["Sender"]>
                     <DisplayTemplate>
                         @context.Sender.FirstName.ToString()-@context.Sender.LastName.ToString()
                     </DisplayTemplate>
@@ -86,24 +71,31 @@
 
                 <DataGridColumn TItem="RemittanceDto"
                                 Field="@nameof(RemittanceDto.CreationTime)"
-                                Caption="CreationTime">
+                                Caption=@L["CreationTime"]>
                     <DisplayTemplate>
                         @context.CreationTime.ToShortDateString()
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="RemittanceDto"
                                 Field="@nameof(RemittanceDto.LastModificationTime)"
-                                Caption="Seted ready Date">
+                                Caption=@L["LastModificationTime"]>
                     <DisplayTemplate>
                         @context.LastModificationTime
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="RemittanceDto"
-                                Field="@nameof(RemittanceDto.Amount)"
-                                Caption="Amount">
+                                Field="@nameof(RemittanceDto.Status)"
+                                Caption=@L["Status"]>
+                    <DisplayTemplate>
+                        @L[$"Enum:StatusType.{(int)context.Status}"]
+                    </DisplayTemplate>
                 </DataGridColumn>
-
-
+                <DataGridColumn TItem="RemittanceDto"
+                                Caption=@L["ApprovedBy"]>
+                    <DisplayTemplate>
+                        @context.ApprovedBy.Name
+                    </DisplayTemplate>
+                </DataGridColumn>
             </DataGridColumns>
         </DataGrid>
     </CardBody>
@@ -118,29 +110,30 @@
                 <CloseButton Clicked="CloseEditModalAsync"/>
             </ModalHeader>
             <ModalBody>
+                    @{
+                    Receivers = Customers.Where(x=>x.Id != EditingEntity.SenderId);
+                    sender = Customers.FirstOrDefault(x => x.Id == EditingEntity.SenderId);
+                }
                     <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
                         <Field >
                             <FieldLabel>@L["Type"]</FieldLabel>
-                            <TextEdit Text="@EditingEntity.Type.ToString()" Disabled />
+                            <TextEdit Text=@L[$"Enum:RemittanceType.{(int)EditingEntity.Type}"]
+                                  Disabled />
                     </Field>
 
-                    <Field>
-                        <FieldLabel>@L["Currency"]</FieldLabel>
-                            <TextEdit Text="@EditingEntity.CurrencyID.ToString()" Disabled />
-                    </Field>
+                     <Field>
+                         <FieldLabel>@L["Ammount"]</FieldLabel>
+                            <NumericEdit TValue="double" @bind-Value="EditingEntity.Amount" Disabled />
+                     </Field>
 
-                    <Field>
-                        <FieldLabel>@L["Sender"]</FieldLabel>
-                    </Field>
-
-                    <Field>
-                        <FieldLabel>@L["Amount"]</FieldLabel>
-                            <NumericEdit TValue="double" @bind-Value="NewEntity.Amount" />
-                        </Field>
-                        <Field>
-                            <FieldLabel>@L["Reciver"]</FieldLabel>
-                            <Select TValue="Guid?" @bind-SelectedValue="@EditingEntity.ReciverId">
-                                @foreach (var c in Customers)
+                     <Field>
+                         <FieldLabel>@L["TotalAmmount"]</FieldLabel>
+                            <NumericEdit TValue="double?" @bind-Value="EditingEntity.TotalAmount" Disabled />
+                     </Field>
+                        <Field >
+                            <FieldLabel>@L["Receiver"]</FieldLabel>
+                            <Select TValue="Guid?" @bind-SelectedValue="@EditingEntity.ReciverId" >
+                                @foreach (var c in Receivers)
                             {
                                 <SelectItem TValue="Guid" Value="@((Guid) c.Id)">
                                     @L[$"{@c.FirstName} {@c.LastName}"]
@@ -164,21 +157,32 @@
     </ModalContent>
 </Modal>
 
-    @code {
+@code {
+
     public Modal? AprrovedModal { get; set; }
+
     [Inject]
     public NavigationManager NavigationManager { get; set; }
+
     public ICollection<CurrencyDto> Currencies { get; set; }
 
     public ICollection<CustomerDto> Customers { get; set; }
+
+    public IEnumerable<CustomerDto> Receivers { get; set; }
+
+    public CustomerDto sender { get; set; } = new CustomerDto() {FirstName ="non" };
+
     protected Modal? ApprovedRemittanceModal;
 
+    // overriding the OnInitializedAsync
     protected override async Task OnInitializedAsync()
     {
         Currencies = (await currencyappservice.GetListAsync(new PagedAndSortedResultRequestDto())).Items.ToList();
         Customers = (await customerappservice.GetListAsync(new PagedAndSortedResultRequestDto())).Items.ToList();
 
     }
+
+    // to get Approved remittances 
     private async Task GetRemittencAsync()
     {
         GetListInput.Status = StatusType.Approved;
@@ -188,20 +192,23 @@
         Entities = result.Items;
         TotalCount = (int)result.TotalCount;
     }
+
+    // overriding the OnDataGridReadAsync
     protected override async Task OnDataGridReadAsync(DataGridReadDataEventArgs<RemittanceDto> e)
     {
         //_logger.LogInformation("On Data Grid executed");
         await GetRemittencAsync();
         await InvokeAsync(StateHasChanged);
     }
-    // private async Task SetAsReleased(Guid reciverId,Guid remittanceId)
+
+    // Set the status of the approved remittances to released with taking the receiver ID
     private async Task SetAsReleased()
     {
-        NavigationManager.NavigateTo("readyremittances");
-
         await AppService.ChangeStatus(EditingEntity.Id.Value, EditingEntity.ReciverId);
         await GetRemittencAsync();
         await InvokeAsync(StateHasChanged);
+        InvokeAsync(EditModal.Hide);
+
     }
 
 

@@ -15,5 +15,11 @@ namespace Haram.RemittanceSystem.EntityFrameworkCore.Currencies
         {
         }
 
+        public async Task<Currency> GetwithoutPaged()
+        {
+            
+
+            throw new NotImplementedException();
+        }
     }
 }

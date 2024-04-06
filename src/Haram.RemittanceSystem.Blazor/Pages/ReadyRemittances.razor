@@ -19,7 +19,7 @@
     -        <CardHeader>
         <Row Class="justify-content-between">
             <Column ColumnSize="ColumnSize.IsAuto">
-                <h2> Ready Remittances</h2>
+                <h2>@L["ReadyRemittances"]</h2>
             </Column>
         </Row>
     </CardHeader>
@@ -35,25 +35,25 @@
             <DataGridColumns>
                 <DataGridEntityActionsColumn TItem="RemittanceDto" @ref="@EntityActionsColumn">
                     <DisplayTemplate>
-                        <Blazorise.Button Clicked="()=>SetAsApproved(context)" Color="Blazorise.Color.Secondary">set</Blazorise.Button>
+                        <Blazorise.Button Clicked="()=>SetAsApproved(context)" Color="Blazorise.Color.Secondary">@L["SetApproved"]</Blazorise.Button>
                     </DisplayTemplate>
                 </DataGridEntityActionsColumn>
+                <DataGridColumn TItem="RemittanceDto"
+                                Field="@nameof(RemittanceDto.Type)"
+                                Caption=@L["SerialNumber"]>
+                    <DisplayTemplate>
+                        @context.SerialNo
+                    </DisplayTemplate>
+                </DataGridColumn>
 
                 <DataGridColumn TItem="RemittanceDto"
                                 Field="@nameof(RemittanceDto.Type)"
                                 Caption=@L["Type"]>
                     <DisplayTemplate>
-                        @context.Type
+                        @L[$"Enum:RemittanceType.{(int)context.Type}"]
                     </DisplayTemplate>
                 </DataGridColumn>
 
-                <DataGridColumn TItem="RemittanceDto"
-                                Field="@nameof(RemittanceDto.Status)"
-                                Caption=@L["Status"]>
-                    <DisplayTemplate>
-                        @context.Status
-                    </DisplayTemplate>
-                </DataGridColumn>
                 <DataGridColumn TItem="RemittanceDto"
                                 Field="@nameof(RemittanceDto.Amount)"
                                 Caption=@L["Ammount"]>
@@ -63,49 +63,46 @@
                 </DataGridColumn>
                 <DataGridColumn TItem="RemittanceDto"
                                 Field="@nameof(RemittanceDto.TotalAmount)"
-                                Caption=@L["Total Ammount"]>
+                                Caption=@L["TotalAmmount"]>
                     <DisplayTemplate>
                         @context.TotalAmount
                     </DisplayTemplate>
                 </DataGridColumn>
-
                 <DataGridColumn TItem="RemittanceDto"
-                                Field="@nameof(RemittanceDto.Status)"
-                                Caption=@L["Status"]>
-                    <DisplayTemplate>
-                        @context.Status
-                    </DisplayTemplate>
-                </DataGridColumn>
-                <DataGridColumn TItem="RemittanceDto"
-                                Caption="Sender Name">
+                                Caption="@L["Sender"]">
                     <DisplayTemplate>
                         @context.Sender.FirstName.ToString()-@context.Sender.LastName.ToString()
                     </DisplayTemplate>
                 </DataGridColumn>
 
-                <DataGridColumn TItem="RemittanceDto"
-                                Caption="IssuedBy">
-                    <DisplayTemplate>
-                        @context.IssuedBy.Name.ToString()
-                    </DisplayTemplate>
-                </DataGridColumn>
+
+
                 <DataGridColumn TItem="RemittanceDto"
                                 Field="@nameof(RemittanceDto.CreationTime)"
-                                Caption="CreationTime">
+                                Caption="@L["CreationTime"]">
                     <DisplayTemplate>
                         @context.CreationTime.ToShortDateString()
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="RemittanceDto"
                                 Field="@nameof(RemittanceDto.LastModificationTime)"
-                                Caption="Seted ready Date">
+                                Caption=@L["LastModificationTime"]>
                     <DisplayTemplate>
                         @context.LastModificationTime
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="RemittanceDto"
-                                Field="@nameof(RemittanceDto.Amount)"
-                                Caption="Amount">
+                                Field="@nameof(RemittanceDto.Status)"
+                                Caption=@L["Status"]>
+                    <DisplayTemplate>
+                        @L[$"Enum:StatusType.{(int)context.Status}"]
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="RemittanceDto"
+                                Caption="@L["IssuedBy"]">
+                    <DisplayTemplate>
+                        @context.IssuedBy.Name.ToString()
+                    </DisplayTemplate>
                 </DataGridColumn>
 
 
@@ -115,7 +112,7 @@
 </Card>
 
 @code{
-
+    // to get ready remittances
     private async Task GetRemittencAsync()
     {
         GetListInput.Status = StatusType.Ready;
@@ -125,12 +122,15 @@
         Entities = result.Items;
         TotalCount = (int)result.TotalCount;
     }
+
+    // overriding OnDataGridReadAsync to get only ready remittances
     protected override async Task OnDataGridReadAsync(DataGridReadDataEventArgs<RemittanceDto> e)
     {
-        //_logger.LogInformation("On Data Grid executed");
         await GetRemittencAsync();
         await InvokeAsync(StateHasChanged);
     }
+
+    // to set the remittance status approved
     private async Task SetAsApproved(RemittanceDto remittanceDto)
     {
         await AppService.ChangeStatus(remittanceDto.Id, Guid.Empty);

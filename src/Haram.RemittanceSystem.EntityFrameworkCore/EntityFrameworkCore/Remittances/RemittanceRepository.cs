@@ -23,6 +23,7 @@ namespace Haram.RemittanceSystem.EntityFrameworkCore.Remittances
                 .Include(x => x.IssuedBy)
                 .Include(x => x.ApprovedBy)
                 .Include(x => x.ReleasedBy)
+                .Include(x=>x.currency)
                 ;
         }
 

@@ -48,80 +48,65 @@ public class RemittanceSystemMenuContributor : IMenuContributor
                 icon: "fas fa-home"
             )
         );
-                      context.Menu.AddItem(
-                  new ApplicationMenuItem(
-                      "Remittances",
-                      l["Remittances"],
-                      icon: "fa fa-wallet"
-                  ).AddItem(
-                      new ApplicationMenuItem(
-                          "Remittances.Remittances",
-                          l["Remittances List"],
-                          url: "/remittances"
-                      )
-                  )
-                  .AddItem(
-                      new ApplicationMenuItem(
-                          "Remittances.ReadyRemittances",
-                          l["Ready Remittances"],
-                          url: "/readyremittances"
-                      )
-                  )
-                   .AddItem(
-                      new ApplicationMenuItem(
-                          "Remittances.ApprovedRemittances",
-                          l["Approved Remittances"],
-                          url: "/approvedremittances"
-                      )
-                  )
-                   .AddItem(
-                      new ApplicationMenuItem(
-                          "Remittances.ReleasedRemittances",
-                          l["Released Remittances"],
-                          url: "/releasedremittances"
-                      )
-                  )
-                   .AddItem(
-                      new ApplicationMenuItem(
-                          "Remittances.NewRemittance",
-                          l["Create Remittance"],
-                          url: "/createremittance"
-                      )
-                  )
-              );
         context.Menu.AddItem(
-              new ApplicationMenuItem(
-                  "Home",
-                  l["test"],
-                  icon: "fa fa-book",
-                  url: "/homepage"
+    new ApplicationMenuItem(
+        "Remittances",
+        l["Remittances"],
+        icon: "fa fa-wallet"
+    ).AddItem(
+        new ApplicationMenuItem(
+            "Remittances.Remittances",
+            l["RemittancesList"],
+            url: "/remittances"
+        )
+    ).AddItem(
+        new ApplicationMenuItem(
+            "Remittances.Remittances",
+            l["IssuedRemittances"],
+            url: "/issuedremittances"
+        )
+    )
+    .AddItem(
+        new ApplicationMenuItem(
+            "Remittances.ReadyRemittances",
+            l["ReadyRemittances"],
+            url: "/readyremittances"
+        )
+    )
+     .AddItem(
+        new ApplicationMenuItem(
+            "Remittances.ApprovedRemittances",
+            l["ApprovedRemittances"],
+            url: "/approvedremittances"
+        )
+    )
+     .AddItem(
+        new ApplicationMenuItem(
+            "Remittances.ReleasedRemittances",
+            l["ReleasedRemittances"],
+            url: "/releasedremittances"
+        )
+    )
+);
+        context.Menu.Items.Insert(
+      0,
+      new ApplicationMenuItem(
+          RemittanceSystemMenus.Home,
+          l["Customers"],
+          "/customers",
+          icon: "fas fa-users"
+      )
+  );
+        context.Menu.Items.Insert(
+0,
+new ApplicationMenuItem(
+    RemittanceSystemMenus.Home,
+    l["Currencies"],
+    "/currencies",
+    icon: "fas fa-building"
+)
+);
 
-              ));
-
-     context.Menu.AddItem(
-                 new ApplicationMenuItem(
-                     "Customers",
-                     l["Customers"],
-                      icon: "fa fa-user"
-                 ).AddItem(
-                     new ApplicationMenuItem(
-                         "Customers.Customers",
-                         l["Customers List"],
-                         url: "/customers"
-                     )
-                 )
-              );
-                      //currencies Column
-     context.Menu.AddItem(
-              new ApplicationMenuItem(
-              "Currencies",
-              l["Currencies"],
-              icon: "fa fa-moneybillalt"
-              ).AddItem(
-              new ApplicationMenuItem(
-                 "Currencies.currencies",
-                 l["currencies List"],
-     url: "/currencies")));
 
         var administration = context.Menu.GetAdministration();
 
