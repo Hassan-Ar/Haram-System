@@ -90,6 +90,10 @@
     "Permission:Currencies": "ادارة العملة",
     "Permission:Currencies.Create": "انشاء عملة جديدة",
     "Permission:Currencies.Edit": "تعديل العملة",
-    "Permission:Currencies.Delete": "مسح العملة"
+    "Permission:Currencies.Delete": "مسح العملة",
+    "SenderInformation": "معلومات المرسل",
+    "ReceiverInformation": " معلومات عن المستلم "
+
+
   }
 }

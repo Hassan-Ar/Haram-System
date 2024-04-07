@@ -167,6 +167,7 @@
                             }
                         </Select>
                     </Field>
+                    <Validation MessageLocalizer="@LH.Localize">
                     <Field>
                         <FieldLabel>@L["Sender"]</FieldLabel>
                             <Select TValue="Guid" @bind-SelectedValue="@NewEntity.SenderId" >
@@ -178,11 +179,53 @@
                             }
                         </Select>
                     </Field>
+                    </Validation>
+
+                    <Label>@L["ReceiverInformation"]</Label>
+                        <Validation MessageLocalizer="@LH.Localize">
+
+                    <Field>
+
+                        <FieldLabel>@L["FirstName"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewEntity.ReceiverFirstName">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+                                            <Validation MessageLocalizer="@LH.Localize"  >
+
+                        <Field>
+                            <FieldLabel>@L["LastName"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewEntity.ReceiverLirstName">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                            </Field>
+                        </Validation>
+
+                                            <Validation MessageLocalizer="@LH.Localize"  >
+
+                        <Field>
+                            <FieldLabel>@L["Phone"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewEntity.ReceiverPhone">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                            </Field>
+                        </Validation>
+                   <Validation MessageLocalizer="@LH.Localize">
 
                     <Field>
                         <FieldLabel>@L["Ammount"]</FieldLabel>
                         <NumericEdit TValue="double" @bind-Value="NewEntity.Amount"/>
-                    </Field>
+                            </Field>
+                        </Validation>
+
                 </Validations>
             </ModalBody>
             <ModalFooter>

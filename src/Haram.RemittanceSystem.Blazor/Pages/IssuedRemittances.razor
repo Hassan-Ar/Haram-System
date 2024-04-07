@@ -254,6 +254,31 @@
                         <FieldLabel>@L["Ammount"]</FieldLabel>
                             <NumericEdit TValue="double" @bind-Value="EditingEntity.Amount" />
                     </Field>
+                        <Label>@L["ReceiverInformation"]</Label>
+                        <Field>
+                            <FieldLabel>@L["FirstName"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingEntity.ReceiverFirstName">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["LastName"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingEntity.ReceiverLirstName">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["Phone"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingEntity.ReceiverPhone">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
                 </Validations>
 
             </ModalBody>

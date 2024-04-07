@@ -85,9 +85,9 @@
     "Permission:Currencies": "Currencie Management",
     "Permission:Currencies.Create": "Creating new Currencie",
     "Permission:Currencies.Edit": "Editing the Currencie",
-    "Permission:Currencies.Delete": "Deleting the Currencie"
-
-
+    "Permission:Currencies.Delete": "Deleting the Currencie",
+    "SenderInformation": "Sender Information",
+    "ReceiverInformation": "Receiver Information",
 
 
 

@@ -35,7 +35,7 @@
             <DataGridColumns>
                 <DataGridEntityActionsColumn TItem="RemittanceDto" @ref="@EntityActionsColumn">
                     <DisplayTemplate>
-                        <Blazorise.Button Clicked="()=> OpenEditModalAsync(context)" Color="Blazorise.Color.Secondary">@L["SetRelease"]</Blazorise.Button>
+                        <Blazorise.Button Clicked="()=> OpenReleaseModalAsync(context)" Color="Blazorise.Color.Secondary">@L["SetRelease"]</Blazorise.Button>
                     </DisplayTemplate>
                 </DataGridEntityActionsColumn>
 
@@ -101,38 +101,160 @@
     </CardBody>
 </Card>
 
-<Modal @ref="@EditModal">
+<Modal @ref="@ReleasingModal">
     <ModalBackdrop />
     <ModalContent IsCentered="true">
         <Form>
             <ModalHeader>
-                <ModalTitle>@EditingEntity.SerialNo</ModalTitle>
-                <CloseButton Clicked="CloseEditModalAsync"/>
+                <ModalTitle>@ReleasingRemittance.SerialNo</ModalTitle>
+                    <CloseButton Clicked="HideReleasingRemittanceModal" />
             </ModalHeader>
             <ModalBody>
                     @{
-                    Receivers = Customers.Where(x=>x.Id != EditingEntity.SenderId);
-                    sender = Customers.FirstOrDefault(x => x.Id == EditingEntity.SenderId);
-                }
-                    <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
+                    sender = Customers.FirstOrDefault(x => x.Id == ReleasingRemittance.SenderId);
+                     }
+                <Validations @ref="@EditValidationsRef" Model="@ReleasingRemittance" ValidateOnLoad="false">
                         <Field >
                             <FieldLabel>@L["Type"]</FieldLabel>
-                            <TextEdit Text=@L[$"Enum:RemittanceType.{(int)EditingEntity.Type}"]
+                            <TextEdit Text=@L[$"Enum:RemittanceType.{(int)ReleasingRemittance.Type}"]
                                   Disabled />
                     </Field>
+                         <Field>
+                             <FieldLabel>@L["SerialNumber"]</FieldLabel >
+                                <TextEdit @bind-Text="@ReleasingRemittance.SerialNo" Disabled>
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                            <Card>
+                                <CardTitle>@L["SenderInformation"]</CardTitle>
+                                <CardBody Border="Border.Dark" Padding="Padding.Is5" >
+                                    <Div Margin="Margin.Is3">
+                                    <Field>
+                        <FieldLabel>@L["FirstName"]</FieldLabel>
+                            <TextEdit @bind-Text="@ReleasingRemittance.Sender.FirstName" Disabled>
+                            <Feedback>
+                                <ValidationError />
+                            </Feedback>
+                        </TextEdit>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["LastName"]</FieldLabel>
+                            <TextEdit @bind-Text="@ReleasingRemittance.Sender.LastName" Disabled>
+                            <Feedback>
+                                <ValidationError />
+                            </Feedback>
+                        </TextEdit>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["FatherName"]</FieldLabel>
+                            <TextEdit @bind-Text="@ReleasingRemittance.Sender.FatherName" Disabled>
+                            <Feedback>
+                                <ValidationError />
+                            </Feedback>
+                        </TextEdit>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["Phone"]</FieldLabel>
+                            <TextEdit @bind-Text="@ReleasingRemittance.Sender.FatherName" Disabled>
+                            <Feedback>
+                                <ValidationError />
+                            </Feedback>
+                        </TextEdit>
+                    </Field>
+                            </Div>
+                        </CardBody>
+                    </Card>
+                    <Field>
+                        <FieldLabel>@L["Currency"]</FieldLabel>
+                            <TextEdit @bind-Text="@ReleasingRemittance.currency.AlphabeticCode" Disabled>
+                            <Feedback>
+                                <ValidationError />
+                            </Feedback>
+                        </TextEdit>
+                    </Field>
 
-                     <Field>
+                    <Field>
                          <FieldLabel>@L["Ammount"]</FieldLabel>
-                            <NumericEdit TValue="double" @bind-Value="EditingEntity.Amount" Disabled />
+                            <NumericEdit TValue="double" @bind-Value="ReleasingRemittance.Amount" Disabled />
                      </Field>
 
                      <Field>
                          <FieldLabel>@L["TotalAmmount"]</FieldLabel>
-                            <NumericEdit TValue="double?" @bind-Value="EditingEntity.TotalAmount" Disabled />
+                            <NumericEdit TValue="double" @bind-Value="ReleasingRemittance.TotalAmount" Disabled />
                      </Field>
+                     <Card>
+                         <CardTitle>@L["ReceiverInformation"]</CardTitle>
+                            <CardBody Border="Border.Dark" Padding="Padding.Is5">
+                                <Div Margin="Margin.Is3">
+                                    <Field>
+                                        <FieldLabel>@L["FirstName"]</FieldLabel>
+                                        <TextEdit @bind-Text="@ReleasingRemittance.ReceiverFirstName" Disabled>
+                                        <Feedback>
+                                            <ValidationError />
+                                        </Feedback>
+                                    </TextEdit>
+                                </Field>
+                                <Field>
+                                    <FieldLabel>@L["LastName"]</FieldLabel>
+                                        <TextEdit @bind-Text="@ReleasingRemittance.ReceiverLirstName" Disabled>
+                                        <Feedback>
+                                            <ValidationError />
+                                        </Feedback>
+                                    </TextEdit>
+                                </Field>
+                                <Field>
+                                    <FieldLabel>@L["FatherName"]</FieldLabel>
+                                        <TextEdit @bind-Text="@ReleasingRemittance.ReceiverPhone" Disabled>
+                                        <Feedback>
+                                            <ValidationError />
+                                        </Feedback>
+                                    </TextEdit>
+                                </Field>
+                            </Div>
+                        </CardBody>
+                    </Card>
+                     <Card Background="Background.Dark" WhiteText Padding="Padding.Is5" Margin="Margin.Is2">
+                         <CardBody Margin="Margin.Is1">
+                        <CardTitle Size="3">
+                            @L["Receiver"]
+                        </CardTitle>
+                     <Row>
+                         <Column>
+                             <Field>
+                                 <FieldLabel>@L["Search the Name"]</FieldLabel>
+                                    <TextEdit @bind-Text="@name" onchange="@OnNameOrPhoneSearchBoxChange" Disabled=IsSelectActive>
+                                        <Feedback>
+                                            <ValidationError />
+                                        </Feedback>
+                                    </TextEdit>
+                                </Field>
+                            </Column>
+                                    <Column>
+                                        <Field>
+                                            <FieldLabel>@L["Search the Name"]</FieldLabel>
+                                            <TextEdit @bind-Text="@PhoneSearchBox" onchange="@OnNameOrPhoneSearchBoxChange" Disabled=IsSelectActive>
+                                                <Feedback>
+                                                    <ValidationError />
+                                                </Feedback>
+                                            </TextEdit>
+                                        </Field>
+                                    </Column>
+                         <Column>
+                             <Button Color="Color.Primary"
+                                     Clicked="ShowModal"
+                                      Style="width:min-content "
+                                      
+                             Size="Size.Small">
+                                 @L["NewCustomer"]
+                            </Button>
+                        </Column>
+                    </Row>
+                    
                         <Field >
                             <FieldLabel>@L["Receiver"]</FieldLabel>
-                            <Select TValue="Guid?" @bind-SelectedValue="@EditingEntity.ReciverId" >
+                                    <Select TValue="Guid?" @bind-SelectedValue="@ReleasingRemittance.ReceiverId" Disabled=IsSelectActive>
                                 @foreach (var c in Receivers)
                             {
                                 <SelectItem TValue="Guid" Value="@((Guid) c.Id)">
@@ -141,11 +263,15 @@
                             }
                         </Select>
                     </Field>
+                        </CardBody>
+                    </Card>
                 </Validations>
             </ModalBody>
             <ModalFooter>
                 <Button Color="Color.Secondary"
-                        Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
+                        Clicked="HideReleasingRemittanceModal">
+                    @L["Cancel"]
+                </Button>
                 <Button Color="Color.Primary"
                         Type="@ButtonType.Submit"
                         PreventDefaultOnSubmit="true"
@@ -157,10 +283,143 @@
     </ModalContent>
 </Modal>
 
+<Modal @ref="CreateCustomerModal">
+    <ModalContent Centered>
+        <Form>
+       <ModalHeader>
+                <ModalTitle>@L["NewCustomer"]</ModalTitle>
+                    <CloseButton Clicked="HideModal" />
+            </ModalHeader>
+            <ModalBody>
+                    <Validations @ref="@CreateValidationsRef" Model="@NewCustomerReceiver" ValidateOnLoad="false">
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                                <FieldLabel>@L["FirstName"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewCustomerReceiver.FirstName">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                            </TextEdit>
+                        </Field>
+                        </Validation>
+
+
+                            <Field>
+                                <FieldLabel>@L["LastName"]</FieldLabel>
+                        <TextEdit @bind-Text="@NewCustomerReceiver.LastName">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                                </TextEdit>
+                            </Field>
+
+                                <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>@L["FatherName"]</FieldLabel>
+                        <TextEdit @bind-Text="@NewCustomerReceiver.FatherName">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>@L["MotherName"]</FieldLabel>
+                                <TextEdit @bind-Text="@NewCustomerReceiver.MotherName">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+
+
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>@L["Gender"]</FieldLabel>
+                                <Select TValue="Genders.Gender" @bind-SelectedValue="@NewCustomerReceiver.CustGender">
+
+                                    @foreach (int gender in Enum.GetValues(typeof(Genders.Gender)))
+                                {
+                                    <SelectItem TValue="Genders.Gender" Value="@((Genders.Gender) gender)">
+                                        @L[$"Enum:Gender.{(int)gender}"]
+
+                                    </SelectItem>
+
+                                }
+
+                            </Select>
+
+                        </Field>
+                    </Validation>
+
+           
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["BirthDate"]</FieldLabel>
+                                <Addons>
+                                    <Addon AddonType="AddonType.Body">
+                                        <DatePicker @ref="@datePicker" TValue="DateTime" @bind-Date="@NewCustomerReceiver.BirthDate" />
+                                    </Addon>
+                                    <Addon AddonType="AddonType.End">
+                                        <Button Color="Color.Light" Clicked="@(()=>datePicker.ToggleAsync())">
+                                            <Icon Name="IconName.CalendarDay" />
+                                        </Button>
+                                    </Addon>
+                                </Addons>
+                            </Field>
+                        </Validation>
+
+           
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>@L["Address"]</FieldLabel>
+                                <TextEdit @bind-Text="@NewCustomerReceiver.Address">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+
+ 
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>@L["Phone"]</FieldLabel>
+                                <TextEdit @bind-Text="@NewCustomerReceiver.Phone">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+
+       
+                    </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                            Clicked="HideModal">
+                        @L["Cancel"]
+                </Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="CreateCustomerAsync">
+                    @L["Save"]
+                </Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+
 @code {
 
-    public Modal? AprrovedModal { get; set; }
-
+    public Modal? ReleasingModal { get; set; }
+    private Modal CreateCustomerModal;
+    DatePicker<DateTime> datePicker;
     [Inject]
     public NavigationManager NavigationManager { get; set; }
 
@@ -170,15 +429,23 @@
 
     public IEnumerable<CustomerDto> Receivers { get; set; }
 
-    public CustomerDto sender { get; set; } = new CustomerDto() {FirstName ="non" };
+    public RemittanceDto ReleasingRemittance { get; set; } = new RemittanceDto() { Sender = new CustomerDto() {} , currency = new CurrencyDto() { } };
 
-    protected Modal? ApprovedRemittanceModal;
+    public CustomerDto sender { get; set; } = new CustomerDto() {FirstName ="non" };
+    public CreateUpdateCustomerDto NewCustomerReceiver { get; set; } = new CreateUpdateCustomerDto();
+    private Validations CreateValidationsRef;
+
+    public string name { get; set; }
+    public string PhoneSearchBox { get; set; }
+    public bool searchBoxIsActive { get; set; } = true;
+    public bool IsSelectActive { get; set; } = false;
 
     // overriding the OnInitializedAsync
     protected override async Task OnInitializedAsync()
     {
         Currencies = (await currencyappservice.GetListAsync(new PagedAndSortedResultRequestDto())).Items.ToList();
         Customers = (await customerappservice.GetListAsync(new PagedAndSortedResultRequestDto())).Items.ToList();
+        Receivers = Customers.ToList();
 
     }
 
@@ -204,14 +471,83 @@
     // Set the status of the approved remittances to released with taking the receiver ID
     private async Task SetAsReleased()
     {
-        await AppService.ChangeStatus(EditingEntity.Id.Value, EditingEntity.ReciverId);
+        await AppService.ChangeStatus(ReleasingRemittance.Id, ReleasingRemittance.ReceiverId);
         await GetRemittencAsync();
         await InvokeAsync(StateHasChanged);
-        InvokeAsync(EditModal.Hide);
+        InvokeAsync(ReleasingModal.Hide);
 
     }
+    // to show create Customer Modal
+    private Task ShowModal()
+    {
+        return CreateCustomerModal.Show();
+    }
+    // to Hide create Customer Modal
+    private Task HideModal()
+    {
+        return CreateCustomerModal.Hide();
+    }
+    // to show Releasing Remittence Modal
+    private Task ShowReleasingRemittanceModal()
+    {
+        return ReleasingModal.Show();
+    }
+    // to Hide Releasing Remittence Modal
+    private Task HideReleasingRemittanceModal()
+    {
+        return ReleasingModal.Hide();
+    }
 
+    // to Search for Reseiver Customer if it exist
+    private async Task OnNameOrPhoneSearchBoxChange()
+    {
+        string[] nameParts = name.Split(' '); // Split full name into parts
+        string firstName = nameParts[0];
+        string lastName = nameParts.Length > 1 ? nameParts[1] : string.Empty;
+        Receivers = Customers
+       .WhereIf(!string.IsNullOrEmpty(lastName), x => x.FirstName.Contains(firstName) || x.LastName.Contains(lastName))
+       .WhereIf(string.IsNullOrEmpty(lastName), x => x.FirstName.Contains(firstName) || x.LastName.Contains(firstName))
+       .WhereIf(!string.IsNullOrEmpty(PhoneSearchBox), x => x.Phone.Contains(PhoneSearchBox))
+       .ToList();
+    }
+    // on Create Customer from the create Customer Model
+    private async Task CreateCustomerAsync()
+    {
+        if (await CreateValidationsRef.ValidateAll())
+        {
+            var result =  await customerappservice.CreateAsync(NewCustomerReceiver);
+            this.Customers.Add(result);
+            Receivers = (Customers.Where(x=>x.Id ==result.Id)).ToList();
+            IsSelectActive = true;
+            ReleasingRemittance.ReceiverId = result.Id;
+            CreateCustomerModal.Hide();
+        }
 
+    }
+    // to Show to Releasing Remittence Modal and bind the Entity
+    protected virtual async Task OpenReleaseModalAsync(RemittanceDto entity)
+    {
+        try
+        {
+            var entityDto = await AppService.GetAsync(entity.Id);
+            ReleasingRemittance.Id = entity.Id;
+            ReleasingRemittance = entity;
+            ReleasingRemittance.Sender = entity.Sender;
+
+            await InvokeAsync(async () =>
+            {
+                StateHasChanged();
+                if (ReleasingModal != null)
+                {
+                    await ReleasingModal.Show();
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+        }
+    }
 }
 
 

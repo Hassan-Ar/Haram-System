@@ -6,6 +6,7 @@ using Haram.RemittanceSystem.Statuses;
 using Haram.RemittanceSystem.StatusTypes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Identity;
@@ -32,6 +33,10 @@ namespace Haram.RemittanceSystem.Remittances
         public  IList<StatusDto> Statuses { get; set; }
         public Guid CurrencyID { get; set; }
         public  CurrencyDto currency { get; set; }
+        public string ReceiverFirstName { get; set; }
+        public string ReceiverLirstName { get; set; }
+        public string ReceiverPhone { get; set; }
+
 
     }
 }

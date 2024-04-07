@@ -23,9 +23,9 @@ namespace Haram.RemittanceSystem.Remittances
         public RemittanceType Type { get; set; }
         public StatusType Status { get; set; }
 
-        public string? ReceiverFirstName { get; set; }
-        public string? ReceiverLirstName { get; set; }
-        public string? ReceiverPhone { get; set; }
+        public string ReceiverFirstName { get; set; }
+        public string ReceiverLirstName { get; set; }
+        public string ReceiverPhone { get; set; }
 
         #region navigation
         public Guid? ApprovedByID { get; set; }
