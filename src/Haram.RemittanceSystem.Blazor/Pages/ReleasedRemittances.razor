@@ -2,12 +2,14 @@
 @using Haram.RemittanceSystem.Currencies
 @using Haram.RemittanceSystem.Customers
 @using Haram.RemittanceSystem.Localization
+@using Haram.RemittanceSystem.Permissions
 @using Haram.RemittanceSystem.StatusTypes
 @using Volo.Abp.Application.Dtos
 @using Haram.RemittanceSystem.Remittances
 @using Microsoft.Extensions.Localization
 @using Volo.Abp.AspNetCore.Components.Web
 @using Haram.RemittanceSystem.RemittanceTypes
+@attribute [Authorize(RemittanceSystemPermissions.Remittances.Default)]
 @inject ICurrencyAppService currencyappservice
 @inject ICustomerAppService customerappservice
 @inject IRemittanceAppServices remittanceappservice

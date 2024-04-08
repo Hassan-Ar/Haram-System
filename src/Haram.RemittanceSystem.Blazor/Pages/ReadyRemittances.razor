@@ -2,12 +2,14 @@
 @using Haram.RemittanceSystem.Currencies
 @using Haram.RemittanceSystem.Customers
 @using Haram.RemittanceSystem.Localization
+@using Haram.RemittanceSystem.Permissions
 @using Haram.RemittanceSystem.StatusTypes
 @using Volo.Abp.Application.Dtos
 @using Haram.RemittanceSystem.Remittances
 @using Microsoft.Extensions.Localization
 @using Volo.Abp.AspNetCore.Components.Web
 @using Haram.RemittanceSystem.RemittanceTypes
+@attribute [Authorize(RemittanceSystemPermissions.Remittances.Default)]
 @inject ICurrencyAppService currencyappservice
 @inject ICustomerAppService customerappservice
 @inject IRemittanceAppServices remittanceappservice
@@ -35,7 +37,9 @@
             <DataGridColumns>
                 <DataGridEntityActionsColumn TItem="RemittanceDto" @ref="@EntityActionsColumn">
                     <DisplayTemplate>
-                        <Blazorise.Button Clicked="()=>SetAsApproved(context)" Color="Blazorise.Color.Secondary">@L["SetApproved"]</Blazorise.Button>
+                        @if (CanSetApproveRemittance) {
+                            <Blazorise.Button Clicked="()=>OpenSetApproveModalAsync(context)" Color="Blazorise.Color.Secondary"  >@L["SetApproved"]</Blazorise.Button>
+                        }
                     </DisplayTemplate>
                 </DataGridEntityActionsColumn>
                 <DataGridColumn TItem="RemittanceDto"
@@ -110,8 +114,146 @@
         </DataGrid>
     </CardBody>
 </Card>
+<Modal @ref="@SetApproveModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@ApproveRemittance.SerialNo</ModalTitle>
+                    <CloseButton Clicked="HideSetApproveRemittanceModal" />
+            </ModalHeader>
+            <ModalBody>
+                    <Validations @ref="@EditValidationsRef" Model="@ApproveRemittance" ValidateOnLoad="false">
+                        <Field >
+                            <FieldLabel>@L["Type"]</FieldLabel>
+                            <TextEdit Text=@L[$"Enum:RemittanceType.{(int)ApproveRemittance.Type}"]
+                                  Disabled />
+                    </Field>
+                         <Field>
+                             <FieldLabel>@L["SerialNumber"]</FieldLabel >
+                            <TextEdit @bind-Text="@ApproveRemittance.SerialNo" Disabled>
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                    <Field>
+                        <FieldLabel>@L["Currency"]</FieldLabel>
+                            <TextEdit @bind-Text="@ApproveRemittance.currency.AlphabeticCode" Disabled>
+                            <Feedback>
+                                <ValidationError />
+                            </Feedback>
+                        </TextEdit>
+                    </Field>
 
+                    <Field>
+                        <FieldLabel>@L["Ammount"]</FieldLabel>
+                            <NumericEdit TValue="double" @bind-Value="ApproveRemittance.Amount" Disabled />
+                     </Field>
+
+                     <Field>
+                         <FieldLabel>@L["TotalAmmount"]</FieldLabel>
+                            <NumericEdit TValue="double" @bind-Value="ApproveRemittance.TotalAmount" Disabled />
+                     </Field>
+                            <Card>
+                                <CardTitle>@L["SenderInformation"]</CardTitle>
+                                <CardBody Border="Border.Dark" Padding="Padding.Is5" >
+                                    <Div Margin="Margin.Is3">
+                                    <Field>
+                        <FieldLabel>@L["FirstName"]</FieldLabel>
+                                        <TextEdit @bind-Text="@ApproveRemittance.Sender.FirstName" Disabled>
+                            <Feedback>
+                                <ValidationError />
+                            </Feedback>
+                        </TextEdit>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["LastName"]</FieldLabel>
+                                        <TextEdit @bind-Text="@ApproveRemittance.Sender.LastName" Disabled>
+                            <Feedback>
+                                <ValidationError />
+                            </Feedback>
+                        </TextEdit>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["FatherName"]</FieldLabel>
+                                        <TextEdit @bind-Text="@ApproveRemittance.Sender.FatherName" Disabled>
+                            <Feedback>
+                                <ValidationError />
+                            </Feedback>
+                        </TextEdit>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["Phone"]</FieldLabel>
+                                        <TextEdit @bind-Text="@ApproveRemittance.Sender.Phone" Disabled>
+                            <Feedback>
+                                <ValidationError />
+                            </Feedback>
+                        </TextEdit>
+                    </Field>
+                            </Div>
+                        </CardBody>
+                    </Card>
+
+                    <Card>
+                        <CardTitle>@L["ReceiverInformation"]</CardTitle>
+                            <CardBody Border="Border.Dark" Padding="Padding.Is5">
+                                <Div Margin="Margin.Is3">
+                                    <Field>
+                                        <FieldLabel>@L["FirstName"]</FieldLabel>
+                                        <TextEdit @bind-Text="@ApproveRemittance.ReceiverFirstName" Disabled>
+                                        <Feedback>
+                                            <ValidationError />
+                                        </Feedback>
+                                    </TextEdit>
+                                </Field>
+                                <Field>
+                                    <FieldLabel>@L["LastName"]</FieldLabel>
+                                        <TextEdit @bind-Text="@ApproveRemittance.ReceiverLirstName" Disabled>
+                                        <Feedback>
+                                            <ValidationError />
+                                        </Feedback>
+                                    </TextEdit>
+                                </Field>
+                                <Field>
+                                    <FieldLabel>@L["Phone"]</FieldLabel>
+                                        <TextEdit @bind-Text="@ApproveRemittance.ReceiverPhone" Disabled>
+                                        <Feedback>
+                                            <ValidationError />
+                                        </Feedback>
+                                    </TextEdit>
+                                </Field>
+                            </Div>
+                        </CardBody>
+                    </Card>
+   
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="HideSetApproveRemittanceModal">
+                    @L["Cancel"]
+                </Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="SetApprove">
+                    @L["Save"]
+                </Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
 @code{
+    public Modal? SetApproveModal;
+    public RemittanceDto ApproveRemittance { get; set; } = new RemittanceDto() { Sender = new CustomerDto() { }, currency = new CurrencyDto() { } };
+    public bool CanSetApproveRemittance { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await SetPermissionsAsync();
+    }
     // to get ready remittances
     private async Task GetRemittencAsync()
     {
@@ -130,12 +272,50 @@
         await InvokeAsync(StateHasChanged);
     }
 
-    // to set the remittance status approved
-    private async Task SetAsApproved(RemittanceDto remittanceDto)
+    // to Hide SetReady Remittence Modal
+    private Task HideSetApproveRemittanceModal()
     {
-        await AppService.ChangeStatus(remittanceDto.Id, Guid.Empty);
+        return SetApproveModal.Hide();
+    }
+
+    // Set the status ready
+    private async Task SetApprove()
+    {
+        await AppService.ChangeStatus(ApproveRemittance.Id, Guid.Empty);
         await GetRemittencAsync();
         await InvokeAsync(StateHasChanged);
+        InvokeAsync(SetApproveModal.Hide);
+
+    }
+    // to set permissions
+    protected override async Task SetPermissionsAsync()
+    {
+
+        CanSetApproveRemittance = await AuthorizationService
+            .IsGrantedAsync(RemittanceSystemPermissions.Remittances.SetApproved);
+    }
+    // to open the set ready modal and pass the entity
+    protected virtual async Task OpenSetApproveModalAsync(RemittanceDto entity)
+    {
+        try
+        {
+            var entityDto = await AppService.GetAsync(entity.Id);
+            ApproveRemittance.Id = entity.Id;
+            ApproveRemittance = entity;
+
+            await InvokeAsync(async () =>
+            {
+                StateHasChanged();
+                if (SetApproveModal != null)
+                {
+                    await SetApproveModal.Show();
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+        }
     }
 
 }

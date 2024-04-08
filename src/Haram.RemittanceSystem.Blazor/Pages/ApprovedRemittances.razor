@@ -2,12 +2,15 @@
 @using Haram.RemittanceSystem.Currencies
 @using Haram.RemittanceSystem.Customers
 @using Haram.RemittanceSystem.Localization
+@using Haram.RemittanceSystem.Permissions
 @using Haram.RemittanceSystem.StatusTypes
+@using Volo.Abp
 @using Volo.Abp.Application.Dtos
 @using Haram.RemittanceSystem.Remittances
 @using Microsoft.Extensions.Localization
 @using Volo.Abp.AspNetCore.Components.Web
 @using Haram.RemittanceSystem.RemittanceTypes
+@attribute [Authorize(RemittanceSystemPermissions.Remittances.Default)]
 @inject ICurrencyAppService currencyappservice
 @inject ICustomerAppService customerappservice
 @inject IRemittanceAppServices remittanceappservice
@@ -35,7 +38,9 @@
             <DataGridColumns>
                 <DataGridEntityActionsColumn TItem="RemittanceDto" @ref="@EntityActionsColumn">
                     <DisplayTemplate>
+                                                @if (CanSetReleaseRemittance) {
                         <Blazorise.Button Clicked="()=> OpenReleaseModalAsync(context)" Color="Blazorise.Color.Secondary">@L["SetRelease"]</Blazorise.Button>
+                                                }
                     </DisplayTemplate>
                 </DataGridEntityActionsColumn>
 
@@ -205,7 +210,7 @@
                                     </TextEdit>
                                 </Field>
                                 <Field>
-                                    <FieldLabel>@L["FatherName"]</FieldLabel>
+                                    <FieldLabel>@L["Phone"]</FieldLabel>
                                         <TextEdit @bind-Text="@ReleasingRemittance.ReceiverPhone" Disabled>
                                         <Feedback>
                                             <ValidationError />
@@ -215,10 +220,11 @@
                             </Div>
                         </CardBody>
                     </Card>
-                     <Card Background="Background.Dark" WhiteText Padding="Padding.Is5" Margin="Margin.Is2">
+
+                    <Card Background="Background.Dark" WhiteText Padding="Padding.Is5" Margin="Margin.Is2">
                          <CardBody Margin="Margin.Is1">
                         <CardTitle Size="3">
-                            @L["Receiver"]
+                                 @L["SelectTheReceiver"]
                         </CardTitle>
                      <Row>
                          <Column>
@@ -233,7 +239,7 @@
                             </Column>
                                     <Column>
                                         <Field>
-                                            <FieldLabel>@L["Search the Name"]</FieldLabel>
+                                            <FieldLabel>@L["Search the Phone"]</FieldLabel>
                                             <TextEdit @bind-Text="@PhoneSearchBox" onchange="@OnNameOrPhoneSearchBoxChange" Disabled=IsSelectActive>
                                                 <Feedback>
                                                     <ValidationError />
@@ -435,10 +441,11 @@
     public CreateUpdateCustomerDto NewCustomerReceiver { get; set; } = new CreateUpdateCustomerDto();
     private Validations CreateValidationsRef;
 
-    public string name { get; set; }
+    public string name { get; set; } = " ";
     public string PhoneSearchBox { get; set; }
     public bool searchBoxIsActive { get; set; } = true;
     public bool IsSelectActive { get; set; } = false;
+    public bool CanSetReleaseRemittance { get; set; }
 
     // overriding the OnInitializedAsync
     protected override async Task OnInitializedAsync()
@@ -446,9 +453,16 @@
         Currencies = (await currencyappservice.GetListAsync(new PagedAndSortedResultRequestDto())).Items.ToList();
         Customers = (await customerappservice.GetListAsync(new PagedAndSortedResultRequestDto())).Items.ToList();
         Receivers = Customers.ToList();
+        await SetPermissionsAsync();
 
     }
+    // to set permissions
+    protected override async Task SetPermissionsAsync()
+    {
 
+        CanSetReleaseRemittance = await AuthorizationService
+            .IsGrantedAsync(RemittanceSystemPermissions.Remittances.SetReleased);
+    }
     // to get Approved remittances 
     private async Task GetRemittencAsync()
     {
@@ -467,10 +481,14 @@
         await GetRemittencAsync();
         await InvokeAsync(StateHasChanged);
     }
-
     // Set the status of the approved remittances to released with taking the receiver ID
     private async Task SetAsReleased()
     {
+        if (ReleasingRemittance.ReceiverId == null || ReleasingRemittance.ReceiverId == Guid.Empty)
+        {
+            throw new UserFriendlyException(L["SelectReceiver"]);
+        }
+  
         await AppService.ChangeStatus(ReleasingRemittance.Id, ReleasingRemittance.ReceiverId);
         await GetRemittencAsync();
         await InvokeAsync(StateHasChanged);
@@ -497,7 +515,6 @@
     {
         return ReleasingModal.Hide();
     }
-
     // to Search for Reseiver Customer if it exist
     private async Task OnNameOrPhoneSearchBoxChange()
     {
@@ -506,7 +523,7 @@
         string lastName = nameParts.Length > 1 ? nameParts[1] : string.Empty;
         Receivers = Customers
        .WhereIf(!string.IsNullOrEmpty(lastName), x => x.FirstName.Contains(firstName) || x.LastName.Contains(lastName))
-       .WhereIf(string.IsNullOrEmpty(lastName), x => x.FirstName.Contains(firstName) || x.LastName.Contains(firstName))
+       .WhereIf(!string.IsNullOrEmpty(firstName) && string.IsNullOrEmpty(lastName), x => x.FirstName.Contains(firstName) || x.LastName.Contains(firstName))
        .WhereIf(!string.IsNullOrEmpty(PhoneSearchBox), x => x.Phone.Contains(PhoneSearchBox))
        .ToList();
     }

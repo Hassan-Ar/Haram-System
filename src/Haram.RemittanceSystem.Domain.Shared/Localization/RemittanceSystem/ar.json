@@ -36,14 +36,14 @@
     "RemittanceType": "نوع الحوالة",
     "StatusType": "حالة الحوالة",
     "ApprovedBy": "موافقة من قبل",
-    "ReleasedBy": "مطروحة من قبل ",
+    "ReleasedBy": "سللمت من قبل ",
     "IssuedBy": "جاهزة من قبل ",
     "Sender": "المرسل",
     "Receiver": "المستقبل",
     "Currency": "العملة",
     "SetReady": "تجهيز",
     "SetApproved": "موافقة",
-    "SetRelease": "طرح",
+    "SetRelease": "تسليم",
     "Customers": "العملاء",
     "NewCustomer": "عميل جديد ",
     "FirstName": "الاسم الاول ",
@@ -64,7 +64,7 @@
     "RemittancesList": "قائمة الحوالات ",
     "IssuedRemittances": "الحوالات الصادرة",
     "ReadyRemittances": " الحوالات الجاهزة",
-    "ReleasedRemittances": " الحوالات المطروحة ",
+    "ReleasedRemittances": " الحوالات المستلمة ",
     "ApprovedRemittances": " الحوالات الموافقة ",
     "First": "الاول",
     "Prev": "السابق",
@@ -80,7 +80,7 @@
     "Permission:Remittances.Delete": "مسح الحوالة",
     "Permission:Remittances.SetReady": "تجهيز الحوالة",
     "Permission:Remittances.SetApproved": "موافقة الحوالة",
-    "Permission:Remittances.SetReleased": "طرح الحوالة ",
+    "Permission:Remittances.SetReleased": "تسليم الحوالة ",
 
     "Permission:Customers": "ادارة العميل",
     "Permission:Customers.Create": "انشاء عميل جديد",
@@ -92,8 +92,12 @@
     "Permission:Currencies.Edit": "تعديل العملة",
     "Permission:Currencies.Delete": "مسح العملة",
     "SenderInformation": "معلومات المرسل",
-    "ReceiverInformation": " معلومات عن المستلم "
+    "ReceiverInformation": " معلومات عن المستلم ",
+    "SelectTheReceiver": "  تحديد المستلم  ",
 
+    "SelectCurrency": "  حدد المرسل   ",
+    "SelectSender": "  حدد العملة   ",
+    "SelectReceiver": "  حدد المستلم   "
 
   }
 }

@@ -2,6 +2,7 @@
 @using Haram.RemittanceSystem.Currencies
 @using Haram.RemittanceSystem.Customers
 @using Haram.RemittanceSystem.Localization
+@using Haram.RemittanceSystem.Permissions
 @using Volo.Abp.Application.Dtos
 @using Haram.RemittanceSystem.Remittances
 @using Microsoft.Extensions.Localization
@@ -9,6 +10,7 @@
 @using Haram.RemittanceSystem.RemittanceTypes
 @using Haram.RemittanceSystem.Genders
 
+@attribute [Authorize(RemittanceSystemPermissions.Currencies.Default)]
 
 @inject ICurrencyAppService currencyappservice
 @inject IStringLocalizer<RemittanceSystemResource> L

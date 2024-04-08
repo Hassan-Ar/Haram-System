@@ -16,6 +16,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Identity;
 using static System.Reflection.Metadata.BlobBuilder;
@@ -45,7 +46,6 @@ namespace Haram.RemittanceSystem.Blazor.Pages
         private int CurrentPage { get; set; }
         private string CurrentSorting { get; set; }
 
-
         // Defult CTOR 
         public Remittances()
         {
@@ -73,6 +73,19 @@ namespace Haram.RemittanceSystem.Blazor.Pages
 
         }
         // to get all Types of remittance , and it can filter the customar name 
+
+        protected override Task CreateEntityAsync()
+        {
+            if (NewEntity.CurrencyID == null || NewEntity.CurrencyID == Guid.Empty)
+            {
+                throw new UserFriendlyException(L["SelectCurrency"]);
+            }
+            if (NewEntity.SenderId == null || NewEntity.SenderId == Guid.Empty)
+            {
+                throw new UserFriendlyException(L["SelectSender"]);
+            }
+            return base.CreateEntityAsync();
+        }
         private async Task GetRemittencAsync(RemittanceType? Type = null, StatusType? Status = null)
         {
             if (name != string.Empty )

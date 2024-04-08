@@ -18,6 +18,8 @@
 @inject AbpBlazorMessageLocalizerHelper<RemittanceSystemResource> LH
 @inherits AbpCrudPageBase<IRemittanceAppServices, RemittanceDto, Guid, GetListRemittancesInputDto, CreateUpdateRemittanceDto>
 
+    
+
 <Card>
 -        <CardHeader>
             <Row Class="justify-content-between">
@@ -133,16 +135,6 @@
             </ModalHeader>
             <ModalBody>
                 <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
-                    <Validation MessageLocalizer="@LH.Localize"  >
-                        <Field>
-                                <FieldLabel>@L["SerialNumber"]</FieldLabel>
-                            <TextEdit @bind-Text="@NewEntity.SerialNo">
-                                <Feedback>
-                                    <ValidationError/>
-                                </Feedback>
-                            </TextEdit>
-                        </Field>
-                    </Validation>
 
                         <Field>
                             <FieldLabel>@L["Type"]</FieldLabel>
@@ -171,6 +163,8 @@
                     <Field>
                         <FieldLabel>@L["Sender"]</FieldLabel>
                             <Select TValue="Guid" @bind-SelectedValue="@NewEntity.SenderId" >
+                                    <SelectItem TValue="Guid?" Value=@Guid.Empty>
+                                </SelectItem>
                                 @foreach (var c in Customers)
                             {
                                 <SelectItem TValue="Guid" Value="@((Guid) c.Id)">
@@ -241,5 +235,6 @@
 </Modal>
 
 @code{
+
 
 }

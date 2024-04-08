@@ -59,7 +59,7 @@ namespace Haram.RemittanceSystem.Remittances
         public virtual Currency currency { get; set; }
 
         #endregion
-
+        
 
         public void SetAmmount(double ammount)
         {
@@ -93,11 +93,6 @@ namespace Haram.RemittanceSystem.Remittances
                     Type = StatusType.Released
                 });
             }
-
         }
-
-
-
-
     }
 }

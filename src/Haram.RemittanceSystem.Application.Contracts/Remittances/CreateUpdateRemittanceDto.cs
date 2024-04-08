@@ -13,9 +13,7 @@ namespace Haram.RemittanceSystem.Remittances
     public class CreateUpdateRemittanceDto : EntityDto
     {
         public Guid? Id { get; set; }
-        [Required]
-        [MaxLength(100)]
-        public string SerialNo { get; set; }
+        public string? SerialNo { get; set; }
         [Required]
         [Range(1,5000000)]
         public double Amount { get; set; }

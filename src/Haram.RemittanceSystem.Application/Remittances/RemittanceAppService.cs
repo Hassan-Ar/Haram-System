@@ -23,6 +23,7 @@ namespace Haram.RemittanceSystem.Remittances
 
     public class RemittanceAppService : CrudAppService<Remittance, RemittanceDto, Guid, GetListRemittancesInputDto, CreateUpdateRemittanceDto>, IRemittanceAppServices
     {
+        
         private readonly ICurrencyRepository _currencyRepository;
         private readonly IRepository<IdentityUser> _userRepository;
         private readonly ICustomerRepository _customerRepository;
@@ -86,6 +87,7 @@ namespace Haram.RemittanceSystem.Remittances
             var remittance = MapToEntity(input);
             remittance.IssuedBy = user;
             remittance.Sender = sender;
+            remittance.SerialNo =  ((Guid.NewGuid()).ToString()).Replace("-", string.Empty); 
             remittance.SetAmmount(input.Amount);
             await Repository.InsertAsync(remittance);
             return MapToGetOutputDto(remittance);
@@ -151,7 +153,6 @@ namespace Haram.RemittanceSystem.Remittances
         //TODO: Change the roles
         public async Task<RemittanceDto> ChangeStatus(Guid id, Guid? receiverId = null)
         {
-
             var remittance = (await Repository.GetQueryableAsync()).FirstOrDefault(x => x.Id == id);
             //Check for null remittance 
             if (remittance is null)
@@ -192,7 +193,6 @@ namespace Haram.RemittanceSystem.Remittances
                 {
                     throw new UserFriendlyException(L["Remittance receiver not Be the Sender"]);
                 }
-
                 remittance.Receiver = receiver;
                 SetReleased(remittance);
                 remittance.ReleasedBy = user;
@@ -202,7 +202,6 @@ namespace Haram.RemittanceSystem.Remittances
             else if (remittance.Status == StatusType.Released)
             {
                 throw new UserFriendlyException(L["Remittance was released before"]);
-
             }
             await Repository.UpdateAsync(remittance);
             return null;
